@@ -12,6 +12,10 @@ namespace ImmortalFighters.WebApp.Models
         public DbSet<QuestCharacter> QuestCharacters { get; set; }
         public DbSet<QuestEntry> QuestEntries { get; set; }
 
+        public IfDbContext(DbContextOptions<IfDbContext> options) : base(options)
+        {
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -22,24 +26,26 @@ namespace ImmortalFighters.WebApp.Models
                 .HasOne(x => x.User)
                 .WithMany(x => x.UserRoles)
                 .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.NoAction)
                 .IsRequired();
             modelBuilder.Entity<UserRole>()
                 .HasOne(x => x.Role)
                 .WithMany(x => x.UserRoles)
                 .HasForeignKey(x => x.RoleId)
+                .OnDelete(DeleteBehavior.NoAction)
                 .IsRequired();
 
             modelBuilder.Entity<Character>()
                 .HasOne(x => x.User)
                 .WithMany(x => x.Characters)
                 .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.NoAction)
                 .IsRequired();
 
             modelBuilder.Entity<Quest>()
                 .HasOne(x => x.DungeonMaster)
                 .WithMany(x => x.OrganizedQuests)
-                .HasForeignKey(x => x.DungeonMasterId)
-                .IsRequired();
+                .HasForeignKey(x => x.DungeonMasterId);
 
             modelBuilder.Entity<QuestCharacter>()
                 .HasKey(x => new { x.QuestId, x.CharacterId });
@@ -47,17 +53,20 @@ namespace ImmortalFighters.WebApp.Models
                 .HasOne(x => x.Quest)
                 .WithMany(x => x.QuestCharacters)
                 .HasForeignKey(x => x.QuestId)
+                .OnDelete(DeleteBehavior.NoAction)
                 .IsRequired();
             modelBuilder.Entity<QuestCharacter>()
                 .HasOne(x => x.Character)
                 .WithMany(x => x.QuestCharacters)
                 .HasForeignKey(x => x.CharacterId)
+                .OnDelete(DeleteBehavior.NoAction)
                 .IsRequired();
 
             modelBuilder.Entity<QuestEntry>()
                 .HasOne(x => x.Quest)
                 .WithMany(x => x.QuestEntries)
                 .HasForeignKey(x => x.QuestId)
+                .OnDelete(DeleteBehavior.NoAction)
                 .IsRequired();
             modelBuilder.Entity<QuestEntry>()
                 .HasOne(x => x.Character)
