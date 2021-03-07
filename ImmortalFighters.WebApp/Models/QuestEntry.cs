@@ -10,7 +10,11 @@ namespace ImmortalFighters.WebApp.Models
 
         public int QuestId { get; set; }
         public Quest Quest { get; set; }
-        public int CharacterId { get; set; }
+
+        public int? CharacterId { get; set; }
         public Character Character { get; set; }
+
+        public int CreatedById { get; set; }
+        public User CreatedBy { get; set; }
     }
 }

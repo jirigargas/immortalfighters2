@@ -10,6 +10,7 @@ namespace ImmortalFighters.WebApp.Models
         public ICollection<UserRole> UserRoles { get; set; }
         public ICollection<Character> Characters { get; set; }
         public ICollection<Quest> OrganizedQuests { get; set; }
+        public ICollection<QuestEntry> QuestEntries { get; set; }
     }
 
 }

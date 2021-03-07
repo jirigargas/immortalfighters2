@@ -127,7 +127,8 @@ namespace ImmortalFighters.WebApp.Migrations
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     QuestId = table.Column<int>(type: "int", nullable: false),
-                    CharacterId = table.Column<int>(type: "int", nullable: false)
+                    CharacterId = table.Column<int>(type: "int", nullable: true),
+                    CreatedById = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -137,12 +138,17 @@ namespace ImmortalFighters.WebApp.Migrations
                         column: x => x.CharacterId,
                         principalTable: "Characters",
                         principalColumn: "CharacterId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_QuestEntries_Quests_QuestId",
                         column: x => x.QuestId,
                         principalTable: "Quests",
                         principalColumn: "QuestId");
+                    table.ForeignKey(
+                        name: "FK_QuestEntries_Users_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "Users",
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateIndex(
@@ -159,6 +165,11 @@ namespace ImmortalFighters.WebApp.Migrations
                 name: "IX_QuestEntries_CharacterId",
                 table: "QuestEntries",
                 column: "CharacterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuestEntries_CreatedById",
+                table: "QuestEntries",
+                column: "CreatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuestEntries_QuestId",

@@ -45,7 +45,8 @@ namespace ImmortalFighters.WebApp.Models
             modelBuilder.Entity<Quest>()
                 .HasOne(x => x.DungeonMaster)
                 .WithMany(x => x.OrganizedQuests)
-                .HasForeignKey(x => x.DungeonMasterId);
+                .HasForeignKey(x => x.DungeonMasterId)
+                .IsRequired();
 
             modelBuilder.Entity<QuestCharacter>()
                 .HasKey(x => new { x.QuestId, x.CharacterId });
@@ -71,7 +72,14 @@ namespace ImmortalFighters.WebApp.Models
             modelBuilder.Entity<QuestEntry>()
                 .HasOne(x => x.Character)
                 .WithMany(x => x.QuestEntries)
-                .HasForeignKey(x => x.CharacterId);
+                .HasForeignKey(x => x.CharacterId)
+                .IsRequired(false);
+            modelBuilder.Entity<QuestEntry>()
+                .HasOne(x => x.CreatedBy)
+                .WithMany(x => x.QuestEntries)
+                .HasForeignKey(x => x.CreatedById)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction);
 
         }
     }

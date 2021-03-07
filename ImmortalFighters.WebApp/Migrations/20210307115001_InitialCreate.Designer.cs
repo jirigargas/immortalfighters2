@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ImmortalFighters.WebApp.Migrations
 {
     [DbContext(typeof(IfDbContext))]
-    [Migration("20210307113608_InitialCreate")]
+    [Migration("20210307115001_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -83,11 +83,14 @@ namespace ImmortalFighters.WebApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CharacterId")
+                    b.Property<int?>("CharacterId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
 
                     b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
@@ -98,6 +101,8 @@ namespace ImmortalFighters.WebApp.Migrations
                     b.HasKey("QuestEntryId");
 
                     b.HasIndex("CharacterId");
+
+                    b.HasIndex("CreatedById");
 
                     b.HasIndex("QuestId");
 
@@ -200,8 +205,12 @@ namespace ImmortalFighters.WebApp.Migrations
                 {
                     b.HasOne("ImmortalFighters.WebApp.Models.Character", "Character")
                         .WithMany("QuestEntries")
-                        .HasForeignKey("CharacterId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("CharacterId");
+
+                    b.HasOne("ImmortalFighters.WebApp.Models.User", "CreatedBy")
+                        .WithMany("QuestEntries")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("ImmortalFighters.WebApp.Models.Quest", "Quest")
@@ -211,6 +220,8 @@ namespace ImmortalFighters.WebApp.Migrations
                         .IsRequired();
 
                     b.Navigation("Character");
+
+                    b.Navigation("CreatedBy");
 
                     b.Navigation("Quest");
                 });
@@ -258,6 +269,8 @@ namespace ImmortalFighters.WebApp.Migrations
                     b.Navigation("Characters");
 
                     b.Navigation("OrganizedQuests");
+
+                    b.Navigation("QuestEntries");
 
                     b.Navigation("UserRoles");
                 });
