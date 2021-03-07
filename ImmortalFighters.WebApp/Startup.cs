@@ -27,7 +27,10 @@ namespace ImmortalFighters.WebApp
                 configuration.RootPath = "ClientApp/dist";
             });
 
-            services.AddDbContext<IfDbContext>(x => x.UseSqlServer(Configuration.GetConnectionString("if")));
+            services.AddDbContext<IfDbContext>(x => x.UseSqlServer(
+                Configuration.GetConnectionString("if"),
+                providerOptions => { providerOptions.EnableRetryOnFailure(); }
+                ));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -6,6 +6,7 @@ namespace ImmortalFighters.WebApp.Models
     {
         public int QuestId { get; set; }
         public string Name { get; set; }
+        public int DungeonMasterId { get; set; }
         public User DungeonMaster { get; set; }
         public ICollection<QuestCharacter> QuestCharacters { get; set; }
         public ICollection<QuestEntry> QuestEntries { get; set; }
