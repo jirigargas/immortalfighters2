@@ -1,4 +1,7 @@
+using ImmortalFighters.WebApp.Middlewares;
 using ImmortalFighters.WebApp.Models;
+using ImmortalFighters.WebApp.Services;
+using ImmortalFighters.WebApp.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +34,11 @@ namespace ImmortalFighters.WebApp
                 Configuration.GetConnectionString("if"),
                 providerOptions => { providerOptions.EnableRetryOnFailure(); }
                 ));
+
+            services.Configure<SecurityOptions>(options => Configuration.GetSection("Security").Bind(options));
+
+            services.AddScoped<IUsersService, UsersService>();
+            services.AddTransient<IAuthenticationProvider, AuthenticationProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +63,8 @@ namespace ImmortalFighters.WebApp
             }
 
             app.UseRouting();
+
+            app.UseMiddleware<AuthenticationMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
