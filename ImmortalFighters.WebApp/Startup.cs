@@ -1,5 +1,7 @@
+using ImmortalFighters.WebApp.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,10 +26,15 @@ namespace ImmortalFighters.WebApp
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddDbContext<IfDbContext>(x => x.UseSqlServer(
+                Configuration.GetConnectionString("if"),
+                providerOptions => { providerOptions.EnableRetryOnFailure(); }
+                ));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IfDbContext dbContext)
         {
             if (env.IsDevelopment())
             {
@@ -68,6 +75,9 @@ namespace ImmortalFighters.WebApp
                     spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });
+
+            // migrate any database changes on startup (includes initial db creation)
+            dbContext.Database.Migrate();
         }
     }
 }
