@@ -3,12 +3,10 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-authentication',
   template: `
-    <p>
-      authentication works!
-    </p>
+  authentication
+  <router-outlet></router-outlet>
   `,
-  styles: [
-  ]
+  styles: [  ]
 })
 export class AuthenticationComponent implements OnInit {
 

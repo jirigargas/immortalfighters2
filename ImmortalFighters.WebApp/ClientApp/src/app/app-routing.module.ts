@@ -4,7 +4,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 
 const routes: Routes = [
   { path: 'authentication', loadChildren: () => import('./authentication/authentication.module').then(m => m.AuthenticationModule) },
-  { path: '', redirectTo: '/authentication', pathMatch: 'full' },
+  { path: '', redirectTo: 'authentication', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];
 
