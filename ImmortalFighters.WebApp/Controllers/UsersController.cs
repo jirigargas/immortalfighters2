@@ -28,13 +28,6 @@ namespace ImmortalFighters.WebApp.Controllers
             return Ok(response.Data);
         }
 
-        [Authorize]
-        [HttpGet]
-        public IActionResult Test()
-        {
-            return Ok();
-        }
-
         [HttpPost]
         [Route("[action]")]
         public IActionResult Register(RegisterRequest args)

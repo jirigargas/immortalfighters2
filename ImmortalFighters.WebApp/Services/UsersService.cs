@@ -1,5 +1,6 @@
 ﻿using ImmortalFighters.WebApp.ApiModels;
 using ImmortalFighters.WebApp.Models;
+using System;
 using System.Linq;
 using BC = BCrypt.Net.BCrypt;
 
@@ -49,17 +50,22 @@ namespace ImmortalFighters.WebApp.Services
 
         public IResponse Register(RegisterRequest request)
         {
-            if (!request.IsValid()) return Response.InvalidResponse("Request data is not valid");
+            if (!request.IsValid()) return Response.InvalidResponse("Data nejsou validní");
 
-            var existingUser = _context.Users.FirstOrDefault(x => x.Email == request.Email);
-            if (existingUser != null) return Response.InvalidResponse("Email is already being used");
+            var userWithSameEmail = _context.Users.FirstOrDefault(x => x.Email == request.Email);
+            if (userWithSameEmail != null) return Response.InvalidResponse("Zadaný email už se používá");
+
+            var userWithSameUsername = _context.Users.FirstOrDefault(x => x.Username == request.Username);
+            if (userWithSameUsername != null) return Response.InvalidResponse("Zadané jméno už se používá");
 
             var hashPassword = BC.HashPassword(request.Password);
             var user = new User
             {
                 Username = request.Username,
                 Password = hashPassword,
-                Email = request.Email
+                Email = request.Email,
+                Created = DateTime.UtcNow,
+                Status = AccountStatus.NotVerified
             };
             _context.Users.Add(user);
             _context.SaveChanges();
