@@ -20,7 +20,7 @@ $ImmortalFighters-warn: mat-palette($mat-red);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$ImmortalFighters-theme: mat-light-theme((
+$ImmortalFighters-theme: mat-dark-theme((
   color: (
     primary: $ImmortalFighters-primary,
     accent: $ImmortalFighters-accent,
