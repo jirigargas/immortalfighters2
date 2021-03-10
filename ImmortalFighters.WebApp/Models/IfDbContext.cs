@@ -20,6 +20,22 @@ namespace ImmortalFighters.WebApp.Models
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<User>()
+                .HasIndex(x => x.Email)
+                .IsUnique();
+            modelBuilder.Entity<User>()
+                .Property(x => x.Email)
+                .IsRequired();
+            modelBuilder.Entity<User>()
+                .HasIndex(x => x.Username)
+                .IsUnique();
+            modelBuilder.Entity<User>()
+                .Property(x => x.Username)
+                .IsRequired();
+            modelBuilder.Entity<User>()
+                .Property(x => x.Password)
+                .IsRequired();
+
             modelBuilder.Entity<UserRole>()
                 .HasKey(x => new { x.UserId, x.RoleId });
             modelBuilder.Entity<UserRole>()
