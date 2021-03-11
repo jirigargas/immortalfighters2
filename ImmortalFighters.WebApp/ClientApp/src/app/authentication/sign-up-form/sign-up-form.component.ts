@@ -26,7 +26,7 @@ export class SignUpFormComponent implements OnInit {
   onSubmit() {
     if (!this.signupForm.valid) return;
 
-    this.usersApi.register(this.signupForm.value).subscribe(() => console.log("registered"));
+    this.usersApi.register(this.signupForm.value).subscribe(() => console.log("registered")); // TODO load sign-in-form
   }
 
 }

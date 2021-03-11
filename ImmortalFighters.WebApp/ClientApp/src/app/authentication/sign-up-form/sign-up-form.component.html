@@ -20,8 +20,19 @@
       </mat-form-field>
 
       <mat-form-field class="full-width">
+        <mat-label>Uživatelské jméno</mat-label>
+        <input type="text" matInput formControlName="username" [errorStateMatcher]="matcher" placeholder="Např. Petr" autocomplete="username">
+        <mat-error *ngIf="signupForm.controls['username'].hasError('required')">
+          Uživatelské jméno je vyžadované
+        </mat-error>
+        <mat-error *ngIf="signupForm.controls['username'].hasError('minlength')">
+          Uživatelské jméno musí mít alespoň 4 znaky
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
         <mat-label>Heslo</mat-label>
-        <input type="password" matInput formControlName="password" [errorStateMatcher]="matcher">
+        <input type="password" matInput formControlName="password" [errorStateMatcher]="matcher" autocomplete="new-password">
         <mat-error *ngIf="signupForm.controls['password'].hasError('required')">
           Heslo je vyžadované
         </mat-error>
@@ -30,16 +41,7 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <mat-label>Uživatelské jméno</mat-label>
-        <input type="text" matInput formControlName="username" [errorStateMatcher]="matcher" placeholder="Např. Petr">
-        <mat-error *ngIf="signupForm.controls['username'].hasError('required')">
-          Uživatelské jméno je vyžadované
-        </mat-error>
-        <mat-error *ngIf="signupForm.controls['username'].hasError('minlength')">
-          Uživatelské jméno musí mít alespoň 4 znaky
-        </mat-error>
-      </mat-form-field>
+
 
     </mat-card-content>
     <mat-card-actions>
