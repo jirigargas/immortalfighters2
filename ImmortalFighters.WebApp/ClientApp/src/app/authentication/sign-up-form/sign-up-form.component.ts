@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UsersApiService } from '../../core/services/users-api.service';
+import { InvalidStateMatcher } from '../../shared/invalid-state-matcher';
 
 @Component({
   selector: 'app-sign-up-form',
@@ -16,7 +16,7 @@ export class SignUpFormComponent implements OnInit {
     password: new FormControl('', [Validators.required, Validators.minLength(8)])
   });
 
-  matcher = new MyErrorStateMatcher();
+  matcher = new InvalidStateMatcher();
 
   constructor(private usersApi: UsersApiService) { }
 
@@ -29,12 +29,4 @@ export class SignUpFormComponent implements OnInit {
     this.usersApi.register(this.signupForm.value).subscribe(() => console.log("registered"));
   }
 
-}
-
-/** Error when invalid control is dirty, touched, or submitted. */
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
 }
