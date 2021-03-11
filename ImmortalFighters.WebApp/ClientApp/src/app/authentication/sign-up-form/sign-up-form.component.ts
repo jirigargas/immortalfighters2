@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 
 @Component({
@@ -8,17 +8,28 @@ import { ErrorStateMatcher } from '@angular/material/core';
   styleUrls: ['./sign-up-form.component.scss']
 })
 export class SignUpFormComponent implements OnInit {
-  
-  emailFormControl = new FormControl('', [
-    Validators.required,
-    Validators.email,
-  ]);
+
+  signupForm = new FormGroup({
+    email: new FormControl('', [
+      Validators.required,
+      Validators.email,
+    ]),
+    username: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required])
+  });
 
   matcher = new MyErrorStateMatcher();
-  
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  onSubmit() {
+    if(!this.signupForm.valid) return;
+    
+    console.info(this.signupForm.value);
+    // TODO send request
   }
 
 }

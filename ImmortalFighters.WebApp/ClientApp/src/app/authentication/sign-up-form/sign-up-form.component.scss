@@ -24,6 +24,11 @@
 
 .mat-card-header {
   margin-right: -16px;
-  margin-left: -16px;
-  margin-top: -16px;
+  margin-left : -16px;
+  margin-top  : -16px;
+}
+
+.mat-card-actions {
+  display        : flex;
+  justify-content: flex-end
 }
