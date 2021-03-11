@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { UsersApiService } from '../../core/services/users-api.service';
 
 @Component({
   selector: 'app-sign-up-form',
@@ -12,12 +13,12 @@ export class SignUpFormComponent implements OnInit {
   signupForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email,]),
     username: new FormControl('', [Validators.required, Validators.minLength(4)]),
-    password: new FormControl('', [Validators.required, Validators.minLength(4)])
+    password: new FormControl('', [Validators.required, Validators.minLength(8)])
   });
 
   matcher = new MyErrorStateMatcher();
 
-  constructor() { }
+  constructor(private usersApi: UsersApiService) { }
 
   ngOnInit(): void {
   }
@@ -25,8 +26,7 @@ export class SignUpFormComponent implements OnInit {
   onSubmit() {
     if (!this.signupForm.valid) return;
 
-    console.info(this.signupForm.value);
-    // TODO send request
+    this.usersApi.register(this.signupForm.value).subscribe(() => console.log("registered"));
   }
 
 }

@@ -12,7 +12,9 @@
         public static bool IsValid(this RegisterRequest request)
         {
             return !string.IsNullOrWhiteSpace(request.Username)
+                && request.Username.Length >= 4
                 && !string.IsNullOrWhiteSpace(request.Password)
+                && request.Password.Length >= 8
                 && !string.IsNullOrWhiteSpace(request.Email);
         }
     }

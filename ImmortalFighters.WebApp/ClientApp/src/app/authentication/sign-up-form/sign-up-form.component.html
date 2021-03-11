@@ -26,13 +26,13 @@
           Heslo je vyžadované
         </mat-error>
         <mat-error *ngIf="signupForm.controls['password'].hasError('minlength')">
-          Heslo musí mít alespoň 4 znaky
+          Heslo musí mít alespoň 8 znaků
         </mat-error>
       </mat-form-field>
 
       <mat-form-field class="full-width">
         <mat-label>Uživatelské jméno</mat-label>
-        <input type="text" matInput formControlName="username" [errorStateMatcher]="matcher">
+        <input type="text" matInput formControlName="username" [errorStateMatcher]="matcher" placeholder="Např. Petr">
         <mat-error *ngIf="signupForm.controls['username'].hasError('required')">
           Uživatelské jméno je vyžadované
         </mat-error>
