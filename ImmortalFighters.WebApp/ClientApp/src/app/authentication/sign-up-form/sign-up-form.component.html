@@ -25,6 +25,9 @@
         <mat-error *ngIf="signupForm.controls['password'].hasError('required')">
           Heslo je vyžadované
         </mat-error>
+        <mat-error *ngIf="signupForm.controls['password'].hasError('minlength')">
+          Heslo musí mít alespoň 4 znaky
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field class="full-width">
@@ -32,6 +35,9 @@
         <input type="text" matInput formControlName="username" [errorStateMatcher]="matcher">
         <mat-error *ngIf="signupForm.controls['username'].hasError('required')">
           Uživatelské jméno je vyžadované
+        </mat-error>
+        <mat-error *ngIf="signupForm.controls['username'].hasError('minlength')">
+          Uživatelské jméno musí mít alespoň 4 znaky
         </mat-error>
       </mat-form-field>
 

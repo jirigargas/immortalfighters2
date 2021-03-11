@@ -10,12 +10,9 @@ import { ErrorStateMatcher } from '@angular/material/core';
 export class SignUpFormComponent implements OnInit {
 
   signupForm = new FormGroup({
-    email: new FormControl('', [
-      Validators.required,
-      Validators.email,
-    ]),
-    username: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required])
+    email: new FormControl('', [Validators.required, Validators.email,]),
+    username: new FormControl('', [Validators.required, Validators.minLength(4)]),
+    password: new FormControl('', [Validators.required, Validators.minLength(4)])
   });
 
   matcher = new MyErrorStateMatcher();
@@ -26,8 +23,8 @@ export class SignUpFormComponent implements OnInit {
   }
 
   onSubmit() {
-    if(!this.signupForm.valid) return;
-    
+    if (!this.signupForm.valid) return;
+
     console.info(this.signupForm.value);
     // TODO send request
   }
