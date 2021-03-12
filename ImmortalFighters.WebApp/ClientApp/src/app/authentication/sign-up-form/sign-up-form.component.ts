@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { RegisterNewUser } from '../../core/store/actions/authentication.actions';
+import { SignUp } from '../../core/store/actions/authentication.actions';
 import { InvalidStateMatcher } from '../../shared/invalid-state-matcher';
 
 @Component({
@@ -11,7 +11,7 @@ import { InvalidStateMatcher } from '../../shared/invalid-state-matcher';
 })
 export class SignUpFormComponent implements OnInit {
 
-  signupForm = new FormGroup({
+  form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email,]),
     username: new FormControl('', [Validators.required, Validators.minLength(4)]),
     password: new FormControl('', [Validators.required, Validators.minLength(8)])
@@ -25,9 +25,9 @@ export class SignUpFormComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.signupForm.valid) return;
+    if (!this.form.valid) return;
 
-    this.store.dispatch(new RegisterNewUser(this.signupForm.value))
+    this.store.dispatch(new SignUp(this.form.value))
   }
 
 }
