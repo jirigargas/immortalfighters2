@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { AuthenticationStoreTypes, SignIn, SignUp } from "../actions/authentication.actions";
+import { AuthenticationStoreTypes, SignedIn, SignIn, SignUp } from "../actions/authentication.actions";
 import { map, switchMap, tap } from "rxjs/operators";
 import { UsersApiService } from "../../services/users-api.service";
 import { Router } from "@angular/router";
@@ -28,9 +28,15 @@ export class AuthenticationEffects {
             ofType(AuthenticationStoreTypes.signIn),
             map((x: SignIn) => x.payload),
             switchMap(x => this.usersApi.login(x)),
-            // TODO Save user and token
+            switchMap(x => [new SignedIn(x)])
+        )
+    );
+
+    $signedIn = createEffect(
+        () => this.actions$.pipe(
+            ofType(AuthenticationStoreTypes.signedIn),
             tap(() => this.router.navigate(['/main']))
         ),
         { dispatch: false }
-    );
+    )
 }

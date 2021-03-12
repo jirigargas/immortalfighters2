@@ -1,9 +1,10 @@
 import { Action } from "@ngrx/store";
-import { SignInRequest, SignUpRequest } from "../../models/authentication-models";
+import { SignInRequest, SignInResponse, SignUpRequest } from "../../models/authentication-models";
 
 export enum AuthenticationStoreTypes {
     signUp = '[AuthenticationStoreTypes] SignUp',
-    signIn = '[AuthenticationStoreTypes] SignIn'
+    signIn = '[AuthenticationStoreTypes] SignIn',
+    signedIn = '[AuthenticationStoreTypes] SignedIn',
 }
 
 export class SignUp implements Action {
@@ -25,5 +26,16 @@ export class SignIn implements Action {
     constructor(signInRequest: SignInRequest) {
         this.type = AuthenticationStoreTypes.signIn
         this.payload = signInRequest;
+    }
+}
+
+export class SignedIn implements Action {
+    
+    readonly type: AuthenticationStoreTypes;
+    readonly payload: SignInResponse;
+
+    constructor(signInResponse: SignInResponse) {
+        this.type = AuthenticationStoreTypes.signedIn
+        this.payload = signInResponse;
     }
 }
