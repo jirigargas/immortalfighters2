@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { UsersApiService } from '../../core/services/users-api.service';
+import { Store } from '@ngrx/store';
+import { RegisterNewUser } from '../../core/store/actions/authentication.actions';
 import { InvalidStateMatcher } from '../../shared/invalid-state-matcher';
 
 @Component({
@@ -18,7 +19,7 @@ export class SignUpFormComponent implements OnInit {
 
   matcher = new InvalidStateMatcher();
 
-  constructor(private usersApi: UsersApiService) { }
+  constructor(private store: Store) { }
 
   ngOnInit(): void {
   }
@@ -26,7 +27,7 @@ export class SignUpFormComponent implements OnInit {
   onSubmit() {
     if (!this.signupForm.valid) return;
 
-    this.usersApi.register(this.signupForm.value).subscribe(() => console.log("registered")); // TODO load sign-in-form
+    this.store.dispatch(new RegisterNewUser(this.signupForm.value))
   }
 
 }
