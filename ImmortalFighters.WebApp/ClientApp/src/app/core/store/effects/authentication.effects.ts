@@ -11,7 +11,6 @@ export class AuthenticationEffects {
         private actions$: Actions,
         private usersApi: UsersApiService,
         private router: Router) {
-
     }
 
     $registerNewUser = createEffect(
