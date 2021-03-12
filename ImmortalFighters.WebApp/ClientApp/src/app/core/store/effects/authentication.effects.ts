@@ -19,7 +19,7 @@ export class AuthenticationEffects {
             ofType(AuthenticationStoreTypes.registerNewUser),
             map((x: RegisterNewUser) => x.payload),
             switchMap(x => this.usersApi.register(x)),
-            tap(() => this.router.navigate(['/']))
+            tap(() => this.router.navigate(['/authentication/signin']))
         ),
         { dispatch: false }
     );
