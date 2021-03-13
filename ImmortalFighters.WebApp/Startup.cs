@@ -31,11 +31,12 @@ namespace ImmortalFighters.WebApp
             });
 
             services.AddDbContext<IfDbContext>(x => x.UseSqlServer(
-                Configuration.GetConnectionString("if"),
+                Configuration.GetConnectionString("If"),
                 providerOptions => { providerOptions.EnableRetryOnFailure(); }
                 ));
 
             services.Configure<SecurityOptions>(options => Configuration.GetSection("Security").Bind(options));
+            services.Configure<SmtpOptions>(options => Configuration.GetSection("Smtp").Bind(options));
 
             services.AddScoped<IUsersService, UsersService>();
             services.AddTransient<IAuthenticationProvider, AuthenticationProvider>();
