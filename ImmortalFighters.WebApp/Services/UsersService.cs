@@ -73,9 +73,10 @@ namespace ImmortalFighters.WebApp.Services
                 Status = AccountStatus.NotVerified
             };
             _context.Users.Add(user);
-            //_context.SaveChanges();
+            _context.SaveChanges();
 
-            await _mediator.Publish(new SendEmail());
+            var message = new RegistrationEmailMessage(user);
+            await _mediator.Publish(new SendEmail { Message = message.BuildMessage() });
 
             return user; ;
         }
