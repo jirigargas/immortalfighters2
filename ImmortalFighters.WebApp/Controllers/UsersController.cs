@@ -15,7 +15,8 @@ namespace ImmortalFighters.WebApp.Controllers
         {
             _usersService = usersService;
         }
-        
+
+        [Authorize]
         [HttpPost]
         [Route("[action]")]
         public IActionResult Login(LoginRequest args)
