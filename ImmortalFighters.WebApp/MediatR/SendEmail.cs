@@ -55,11 +55,9 @@ namespace ImmortalFighters.WebApp.MediatR
 
             message.Subject = "Vítej do světa Immortal Fighters!";
 
-            // TODO Add headers so Google do not treat it as spam
-
             BodyBuilder bodyBuilder = new BodyBuilder();
-            bodyBuilder.HtmlBody = "<h1>Hello World!</h1>";
-            bodyBuilder.TextBody = "Hello World!";
+            bodyBuilder.HtmlBody = "Pro dokončení registrace prosím klikni na tento <a href=\"\">odkaz</a>"; // TODO JG add correct url
+            bodyBuilder.TextBody = "Pro dokončení registrace otevři tento odkaz: ";
 
             message.Body = bodyBuilder.ToMessageBody();
 

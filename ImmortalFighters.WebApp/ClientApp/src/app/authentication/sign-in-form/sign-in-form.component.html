@@ -33,6 +33,7 @@
 
         </mat-card-content>
         <mat-card-actions>
+            <a mat-button [routerLink]="['/authentication/signup']">Ještě nemáš účet?</a>
             <button type="submit" [disabled]="!form.valid" mat-raised-button color="accent">Přihlásit se</button>
         </mat-card-actions>
     </mat-card>

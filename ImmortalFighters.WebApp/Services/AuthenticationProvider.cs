@@ -37,10 +37,14 @@ namespace ImmortalFighters.WebApp.Services
             var key = Encoding.ASCII.GetBytes(_securityOptions.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Id, user.UserId.ToString()) }),
+                Subject = new ClaimsIdentity(new[] 
+                { 
+                    new Claim(ClaimTypes.Id, user.UserId.ToString())
+                }),
                 Expires = DateTime.UtcNow.Add(_securityOptions.TokenExpirationTimeout),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
+
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
