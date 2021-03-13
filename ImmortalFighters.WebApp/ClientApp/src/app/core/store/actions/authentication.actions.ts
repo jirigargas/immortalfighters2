@@ -5,6 +5,7 @@ export enum AuthenticationStoreTypes {
     signUp = '[AuthenticationStoreTypes] SignUp',
     signIn = '[AuthenticationStoreTypes] SignIn',
     signedIn = '[AuthenticationStoreTypes] SignedIn',
+    signOut = '[AuthenticationStoreTypes] SignOut',
 }
 
 export class SignUp implements Action {
@@ -37,5 +38,14 @@ export class SignedIn implements Action {
     constructor(signInResponse: SignInResponse) {
         this.type = AuthenticationStoreTypes.signedIn
         this.payload = signInResponse;
+    }
+}
+
+export class SignOut implements Action {
+    
+    readonly type: AuthenticationStoreTypes;
+
+    constructor() {
+        this.type = AuthenticationStoreTypes.signOut;
     }
 }

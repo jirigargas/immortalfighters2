@@ -11,7 +11,9 @@ export const authenticationReducer = (state = initialState, action: Action): Aut
     switch (action.type) {
         case AuthenticationStoreTypes.signedIn:
             var response = (action as SignedIn).payload;
-            return { ...state, token: response.token, username: response.username }
+            return { ...state, token: response.token, username: response.username };
+        case AuthenticationStoreTypes.signOut:
+            return { ...state, token: "", username: "" };
         default:
             return state;
     }

@@ -22,7 +22,7 @@ import { AppendTokenInterceptor } from './interceptors/append-token.interceptor'
   ],
   providers: [
     UsersApiService,
-    { provide: HTTP_INTERCEPTORS, useClass: AppendTokenInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AppendTokenInterceptor, multi: true }
   ]
 })
 export class CoreModule { }
