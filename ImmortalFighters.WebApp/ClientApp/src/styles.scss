@@ -17,6 +17,7 @@ $ImmortalFighters-accent: mat-palette($mat-blue, 300);
 
 // The warn palette is optional (defaults to red).
 $ImmortalFighters-warn: mat-palette($mat-red);
+$warn-color: mat-color($ImmortalFighters-warn);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
@@ -37,3 +38,11 @@ $ImmortalFighters-theme: mat-dark-theme((
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.red-snackbar {
+  background: $warn-color;
+}
+
+.red-snackbar span {
+  color: white;
+}

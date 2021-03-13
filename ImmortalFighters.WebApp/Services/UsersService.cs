@@ -1,4 +1,5 @@
 ﻿using ImmortalFighters.WebApp.ApiModels;
+using ImmortalFighters.WebApp.Helpers;
 using ImmortalFighters.WebApp.MediatR;
 using ImmortalFighters.WebApp.Models;
 using MediatR;
@@ -33,11 +34,11 @@ namespace ImmortalFighters.WebApp.Services
         {
             var user = _context.Users.SingleOrDefault(x => x.Email == request.Email);
 
-            if (user == null) return null;
+            if (user == null) throw new ApiResponseException { StatusCode = 400, ClientMessage = "Tebe neznám" };
 
             var isPasswordValid = BC.Verify(request.Password, user.Password);
 
-            if (!isPasswordValid) return null;
+            if (!isPasswordValid) throw new ApiResponseException { StatusCode = 400, ClientMessage = "Tebe neznám" };
 
             var token = _authenticationProvider.GetToken(user);
 
@@ -55,13 +56,15 @@ namespace ImmortalFighters.WebApp.Services
 
         public async Task<User> Register(RegisterRequest request)
         {
-            if (!request.IsValid()) return null; // "Data nejsou validní";
+            if (!request.IsValid()) throw new ApiResponseException { StatusCode = 400 };
 
             var userWithSameEmail = _context.Users.FirstOrDefault(x => x.Email == request.Email);
-            if (userWithSameEmail != null) return null; // "Zadaný email už se používá";
+            if (userWithSameEmail != null)
+                throw new ApiResponseException { StatusCode = 400, ClientMessage = "Zadaný email už se používá" };
 
             var userWithSameUsername = _context.Users.FirstOrDefault(x => x.Username == request.Username);
-            if (userWithSameUsername != null) return null; // "Zadané jméno už se používá";
+            if (userWithSameUsername != null)
+                throw new ApiResponseException { StatusCode = 400, ClientMessage = "Zadané jméno už se používá" };
 
             var hashPassword = BC.HashPassword(request.Password);
             var user = new User
@@ -78,7 +81,7 @@ namespace ImmortalFighters.WebApp.Services
             var message = new RegistrationEmailMessage(user);
             await _mediator.Publish(new SendEmail { Message = message.BuildMessage() });
 
-            return user; ;
+            return user;
         }
     }
 }
