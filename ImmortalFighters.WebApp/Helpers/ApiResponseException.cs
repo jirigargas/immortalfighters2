@@ -5,7 +5,7 @@ namespace ImmortalFighters.WebApp.Helpers
 {
     public class ApiResponseException : Exception
     {
-        public int HttpResponseCode { get; set; }
+        public int StatusCode { get; set; }
         public string ClientMessage { get; set; }
 
         public ApiResponseException()

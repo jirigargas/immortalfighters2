@@ -34,11 +34,11 @@ namespace ImmortalFighters.WebApp.Services
         {
             var user = _context.Users.SingleOrDefault(x => x.Email == request.Email);
 
-            if (user == null) throw new ApiResponseException { HttpResponseCode = 400 };
+            if (user == null) throw new ApiResponseException { StatusCode = 400 };
 
             var isPasswordValid = BC.Verify(request.Password, user.Password);
 
-            if (!isPasswordValid) throw new ApiResponseException { HttpResponseCode = 400 };
+            if (!isPasswordValid) throw new ApiResponseException { StatusCode = 400 };
 
             var token = _authenticationProvider.GetToken(user);
 
@@ -56,15 +56,15 @@ namespace ImmortalFighters.WebApp.Services
 
         public async Task<User> Register(RegisterRequest request)
         {
-            if (!request.IsValid()) throw new ApiResponseException { HttpResponseCode = 400 };
+            if (!request.IsValid()) throw new ApiResponseException { StatusCode = 400 };
 
             var userWithSameEmail = _context.Users.FirstOrDefault(x => x.Email == request.Email);
             if (userWithSameEmail != null)
-                throw new ApiResponseException { HttpResponseCode = 400, ClientMessage = "Zadaný email už se používá" };
+                throw new ApiResponseException { StatusCode = 400, ClientMessage = "Zadaný email už se používá" };
 
             var userWithSameUsername = _context.Users.FirstOrDefault(x => x.Username == request.Username);
             if (userWithSameUsername != null)
-                throw new ApiResponseException { HttpResponseCode = 400, ClientMessage = "Zadané jméno už se používá" };
+                throw new ApiResponseException { StatusCode = 400, ClientMessage = "Zadané jméno už se používá" };
 
             var hashPassword = BC.HashPassword(request.Password);
             var user = new User
