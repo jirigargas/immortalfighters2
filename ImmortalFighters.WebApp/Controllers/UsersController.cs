@@ -21,10 +21,6 @@ namespace ImmortalFighters.WebApp.Controllers
         public IActionResult Login(LoginRequest args)
         {
             var response = _usersService.Authenticate(args);
-
-            if (response == null)
-                return BadRequest();
-
             return Ok(response);
         }
 
@@ -33,10 +29,6 @@ namespace ImmortalFighters.WebApp.Controllers
         public async Task<IActionResult> Register(RegisterRequest args)
         {
             var response = await _usersService.Register(args);
-
-            if (response == null)
-                return BadRequest();
-
             return Ok(response);
         }
     }
