@@ -1,15 +1,18 @@
 ﻿using ImmortalFighters.WebApp.ApiModels;
+using ImmortalFighters.WebApp.MediatR;
 using ImmortalFighters.WebApp.Models;
+using MediatR;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using BC = BCrypt.Net.BCrypt;
 
 namespace ImmortalFighters.WebApp.Services
 {
     public interface IUsersService
     {
-        IResponse<LoginResponse> Authenticate(LoginRequest request);
-        IResponse Register(RegisterRequest request);
+        LoginResponse Authenticate(LoginRequest request);
+        Task<User> Register(RegisterRequest request);
         User GetById(int id);
     }
 
@@ -17,30 +20,32 @@ namespace ImmortalFighters.WebApp.Services
     {
         private readonly IfDbContext _context;
         private readonly IAuthenticationProvider _authenticationProvider;
+        private readonly IMediator _mediator;
 
-        public UsersService(IfDbContext context, IAuthenticationProvider authenticationProvider)
+        public UsersService(IfDbContext context, IAuthenticationProvider authenticationProvider, IMediator mediator)
         {
             _context = context;
             _authenticationProvider = authenticationProvider;
+            _mediator = mediator;
         }
 
-        public IResponse<LoginResponse> Authenticate(LoginRequest request)
+        public LoginResponse Authenticate(LoginRequest request)
         {
             var user = _context.Users.SingleOrDefault(x => x.Email == request.Email);
 
-            if (user == null) return Response<LoginResponse>.InvalidResponse("Authentication failed");
+            if (user == null) return null;
 
             var isPasswordValid = BC.Verify(request.Password, user.Password);
 
-            if (!isPasswordValid) return Response<LoginResponse>.InvalidResponse("Authentication failed");
+            if (!isPasswordValid) return null;
 
             var token = _authenticationProvider.GetToken(user);
 
-            return Response<LoginResponse>.ValidResponse(new LoginResponse
+            return new LoginResponse
             {
                 Token = token,
                 Username = user.Password
-            });
+            };
         }
 
         public User GetById(int id)
@@ -48,15 +53,15 @@ namespace ImmortalFighters.WebApp.Services
             return _context.Users.Find(id);
         }
 
-        public IResponse Register(RegisterRequest request)
+        public async Task<User> Register(RegisterRequest request)
         {
-            if (!request.IsValid()) return Response.InvalidResponse("Data nejsou validní");
+            if (!request.IsValid()) return null; // "Data nejsou validní";
 
             var userWithSameEmail = _context.Users.FirstOrDefault(x => x.Email == request.Email);
-            if (userWithSameEmail != null) return Response.InvalidResponse("Zadaný email už se používá");
+            if (userWithSameEmail != null) return null; // "Zadaný email už se používá";
 
             var userWithSameUsername = _context.Users.FirstOrDefault(x => x.Username == request.Username);
-            if (userWithSameUsername != null) return Response.InvalidResponse("Zadané jméno už se používá");
+            if (userWithSameUsername != null) return null; // "Zadané jméno už se používá";
 
             var hashPassword = BC.HashPassword(request.Password);
             var user = new User
@@ -68,9 +73,11 @@ namespace ImmortalFighters.WebApp.Services
                 Status = AccountStatus.NotVerified
             };
             _context.Users.Add(user);
-            _context.SaveChanges();
+            //_context.SaveChanges();
 
-            return Response.ValidResponse();
+            await _mediator.Publish(new SendEmail());
+
+            return user; ;
         }
     }
 }
