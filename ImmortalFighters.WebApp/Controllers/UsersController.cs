@@ -1,7 +1,7 @@
 ﻿using ImmortalFighters.WebApp.ApiModels;
-using ImmortalFighters.WebApp.Helpers;
 using ImmortalFighters.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace ImmortalFighters.WebApp.Controllers
 {
@@ -22,29 +22,22 @@ namespace ImmortalFighters.WebApp.Controllers
         {
             var response = _usersService.Authenticate(args);
 
-            if (!response.IsValid)
-                return BadRequest(response.Message);
+            if (response == null)
+                return BadRequest();
 
-            return Ok(response.Data);
-        }
-
-        [Authorize]
-        [HttpGet]
-        public IActionResult Test()
-        {
-            return Ok();
+            return Ok(response);
         }
 
         [HttpPost]
         [Route("[action]")]
-        public IActionResult Register(RegisterRequest args)
+        public async Task<IActionResult> Register(RegisterRequest args)
         {
-            var response = _usersService.Register(args);
+            var response = await _usersService.Register(args);
 
-            if (!response.IsValid)
-                return BadRequest(response.Message);
+            if (response == null)
+                return BadRequest();
 
-            return Ok();
+            return Ok(response);
         }
     }
 }

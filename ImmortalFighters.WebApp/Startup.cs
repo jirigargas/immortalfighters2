@@ -2,6 +2,7 @@ using ImmortalFighters.WebApp.Middlewares;
 using ImmortalFighters.WebApp.Models;
 using ImmortalFighters.WebApp.Services;
 using ImmortalFighters.WebApp.Settings;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -29,13 +30,14 @@ namespace ImmortalFighters.WebApp
             {
                 configuration.RootPath = "ClientApp/dist";
             });
-
+            services.AddMediatR(typeof(Startup));
             services.AddDbContext<IfDbContext>(x => x.UseSqlServer(
-                Configuration.GetConnectionString("if"),
+                Configuration.GetConnectionString("If"),
                 providerOptions => { providerOptions.EnableRetryOnFailure(); }
                 ));
 
             services.Configure<SecurityOptions>(options => Configuration.GetSection("Security").Bind(options));
+            services.Configure<SmtpOptions>(options => Configuration.GetSection("Smtp").Bind(options));
 
             services.AddScoped<IUsersService, UsersService>();
             services.AddTransient<IAuthenticationProvider, AuthenticationProvider>();
