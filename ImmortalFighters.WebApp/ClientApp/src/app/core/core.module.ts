@@ -8,6 +8,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { AuthenticationEffects } from './store/effects/authentication.effects';
 import { AppendTokenInterceptor } from './interceptors/append-token.interceptor';
 import { UnauthorizedErrorHandler } from './errorHandlers/unauthorized.handler';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { BadRequestErrorHandler } from './errorHandlers/bad-request.handler';
 
 
 
@@ -16,6 +18,7 @@ import { UnauthorizedErrorHandler } from './errorHandlers/unauthorized.handler';
   imports: [
     CommonModule,
     HttpClientModule,
+    MatSnackBarModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot([
       AuthenticationEffects
@@ -24,7 +27,8 @@ import { UnauthorizedErrorHandler } from './errorHandlers/unauthorized.handler';
   providers: [
     UsersApiService,
     { provide: HTTP_INTERCEPTORS, useClass: AppendTokenInterceptor, multi: true },
-    { provide: ErrorHandler, useClass: UnauthorizedErrorHandler }
+    { provide: ErrorHandler, useClass: UnauthorizedErrorHandler },
+    { provide: ErrorHandler, useClass: BadRequestErrorHandler }
   ]
 })
 export class CoreModule { }

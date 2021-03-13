@@ -34,11 +34,11 @@ namespace ImmortalFighters.WebApp.Services
         {
             var user = _context.Users.SingleOrDefault(x => x.Email == request.Email);
 
-            if (user == null) throw new ApiResponseException { StatusCode = 400 };
+            if (user == null) throw new ApiResponseException { StatusCode = 400, ClientMessage = "Tebe neznám" };
 
             var isPasswordValid = BC.Verify(request.Password, user.Password);
 
-            if (!isPasswordValid) throw new ApiResponseException { StatusCode = 400 };
+            if (!isPasswordValid) throw new ApiResponseException { StatusCode = 400, ClientMessage = "Tebe neznám" };
 
             var token = _authenticationProvider.GetToken(user);
 
