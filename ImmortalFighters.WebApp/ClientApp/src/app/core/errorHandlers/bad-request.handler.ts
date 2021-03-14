@@ -3,7 +3,9 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { ErrorHandler, Injectable } from "@angular/core";
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+  })
 export class BadRequestErrorHandler implements ErrorHandler {
 
     constructor(private snackBar: MatSnackBar) { }

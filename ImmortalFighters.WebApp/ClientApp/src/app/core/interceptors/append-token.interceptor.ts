@@ -7,7 +7,9 @@ import { switchMap } from 'rxjs/operators';
 import { getToken } from '../store/reducers/authentication.reducer';
 import { Router } from '@angular/router';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AppendTokenInterceptor implements HttpInterceptor {
 
   constructor(private store: Store<AppState>, private router: Router) {

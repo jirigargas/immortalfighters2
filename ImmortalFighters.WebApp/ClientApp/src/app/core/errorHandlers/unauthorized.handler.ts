@@ -3,7 +3,9 @@ import { ErrorHandler, Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { SignOut } from "../store/actions/authentication.actions";
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class UnauthorizedErrorHandler implements ErrorHandler {
 
     constructor(private store: Store) { }
