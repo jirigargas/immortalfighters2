@@ -1,5 +1,5 @@
 <mat-toolbar color="primary" class="mat-elevation-z8">
-    <button mat-icon-button aria-label="menu">
+    <button mat-icon-button aria-label="menu" (click)="drawer.toggle()">
         <mat-icon>menu</mat-icon>
     </button>
     <span>Immortal Fighters</span>
@@ -9,4 +9,16 @@
     </button>
 </mat-toolbar>
 
-<router-outlet></router-outlet>
+<mat-drawer-container class="container" autosize>
+    <mat-drawer #drawer mode="side" opened>
+        <mat-nav-list dense>
+            <a mat-list-item [routerLink]="['/main/quest']"> Dobrodružství </a>
+            <a mat-list-item [routerLink]="['/main/dungeon']"> Jeskyně </a>
+            <mat-divider></mat-divider>
+            <a mat-list-item [routerLink]="['/main/forum']"> Fóra </a>
+        </mat-nav-list>
+    </mat-drawer>
+    <mat-drawer-content class="main-content">
+        <router-outlet></router-outlet>
+    </mat-drawer-content>
+</mat-drawer-container>
