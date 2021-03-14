@@ -43,7 +43,7 @@ export class AuthenticationEffects {
     $signOut = createEffect(
         () => this.actions$.pipe(
             ofType(AuthenticationStoreTypes.signOut),
-            tap(() => this.router.navigate(['/authentication/signin']))
+            tap(() => this.router.navigate(['/']))
         ),
         { dispatch: false }
     )
