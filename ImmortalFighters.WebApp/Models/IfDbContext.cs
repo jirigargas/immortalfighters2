@@ -2,6 +2,13 @@
 
 namespace ImmortalFighters.WebApp.Models
 {
+    public class Forum
+    {
+        public int ForumId { get; set; }
+        public string Name { get; set; }
+        public string Category { get; set; }
+    }
+
     public class IfDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
@@ -11,6 +18,7 @@ namespace ImmortalFighters.WebApp.Models
         public DbSet<Quest> Quests { get; set; }
         public DbSet<QuestCharacter> QuestCharacters { get; set; }
         public DbSet<QuestEntry> QuestEntries { get; set; }
+        public DbSet<Forum> Forums { get; set; }
 
         public IfDbContext(DbContextOptions<IfDbContext> options) : base(options)
         {
@@ -96,6 +104,11 @@ namespace ImmortalFighters.WebApp.Models
                 .HasForeignKey(x => x.CreatedById)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Forum>()
+                .Property(x => x.Name).IsRequired();
+            modelBuilder.Entity<Forum>()
+                .Property(x => x.Category).IsRequired();
 
         }
     }

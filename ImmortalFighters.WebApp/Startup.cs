@@ -41,6 +41,7 @@ namespace ImmortalFighters.WebApp
             services.Configure<SmtpOptions>(options => Configuration.GetSection("Smtp").Bind(options));
 
             services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IForumService, ForumService>();
             services.AddTransient<IAuthenticationProvider, AuthenticationProvider>();
         }
 
