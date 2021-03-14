@@ -1,0 +1,5 @@
+<mat-selection-list #forums [multiple]="false" dense>
+    <mat-list-option *ngFor="let forum of forums$ | async" [value]="forum" [routerLink]="[forum.forumId]">
+        {{forum.name}}
+    </mat-list-option>
+</mat-selection-list>

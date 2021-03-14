@@ -10,6 +10,7 @@ import { AppendTokenInterceptor } from './interceptors/append-token.interceptor'
 import { UnauthorizedErrorHandler } from './errorHandlers/unauthorized.handler';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BadRequestErrorHandler } from './errorHandlers/bad-request.handler';
+import { ForumApiService } from './services/forum-api.service';
 
 
 
@@ -26,6 +27,7 @@ import { BadRequestErrorHandler } from './errorHandlers/bad-request.handler';
   ],
   providers: [
     UsersApiService,
+    ForumApiService,
     { provide: HTTP_INTERCEPTORS, useClass: AppendTokenInterceptor, multi: true },
     { provide: ErrorHandler, useClass: UnauthorizedErrorHandler },
     { provide: ErrorHandler, useClass: BadRequestErrorHandler }

@@ -15,7 +15,7 @@ export class UsersApiService {
     return this.httpClient.post(this.baseUrl + "Users/Register", request);
   }
 
-  login(request: SignInRequest) : Observable<SignInResponse> {
+  login(request: SignInRequest): Observable<SignInResponse> {
     return this.httpClient.post<SignInResponse>(this.baseUrl + "Users/Login", request);
   }
 }
