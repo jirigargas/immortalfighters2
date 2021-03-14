@@ -45,7 +45,7 @@ namespace ImmortalFighters.WebApp.Services
             return new LoginResponse
             {
                 Token = token,
-                Username = user.Password
+                Username = user.Username
             };
         }
 
