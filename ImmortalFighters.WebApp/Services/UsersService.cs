@@ -3,6 +3,7 @@ using ImmortalFighters.WebApp.Helpers;
 using ImmortalFighters.WebApp.MediatR;
 using ImmortalFighters.WebApp.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -51,7 +52,7 @@ namespace ImmortalFighters.WebApp.Services
 
         public User GetById(int id)
         {
-            return _context.Users.Find(id);
+            return _context.Users.Include(x => x.UserRoles).FirstOrDefault(x => x.UserId == id);
         }
 
         public async Task<User> Register(RegisterRequest request)
