@@ -1,6 +1,8 @@
-﻿using ImmortalFighters.WebApp.Helpers;
+﻿using ImmortalFighters.WebApp.ApiModels;
+using ImmortalFighters.WebApp.Helpers;
 using ImmortalFighters.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace ImmortalFighters.WebApp.Controllers
 {
@@ -21,6 +23,13 @@ namespace ImmortalFighters.WebApp.Controllers
         {
             var response = _forumService.GetAll();
             return Ok(response);
+        }
+
+        [HttpPost]
+        [AuthorizeRoles(Consts.RoleModerator)]
+        public IActionResult Post(CreateNewForumRequest request)
+        {
+            throw new NotImplementedException();
         }
 
     }

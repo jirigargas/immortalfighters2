@@ -52,7 +52,10 @@ namespace ImmortalFighters.WebApp.Services
 
         public User GetById(int id)
         {
-            return _context.Users.Include(x => x.UserRoles).FirstOrDefault(x => x.UserId == id);
+            return _context.Users
+                .Include(x => x.UserRoles)
+                .ThenInclude(x => x.Role)
+                .FirstOrDefault(x => x.UserId == id);
         }
 
         public async Task<User> Register(RegisterRequest request)
