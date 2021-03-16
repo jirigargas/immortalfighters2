@@ -4,6 +4,8 @@
     </button>
     <span>Immortal Fighters</span>
     <span class="spacer"></span>
+    <span>{{module}}</span>
+    <span class="spacer"></span>
     <a mat-icon-button (click)="signOut()" aria-label="odhlásit se">
         <mat-icon>logout</mat-icon>
     </a>
@@ -11,7 +13,7 @@
 
 <mat-drawer-container class="container" autosize>
     <mat-drawer #drawer mode="side" opened>
-        <mat-nav-list dense>
+        <mat-nav-list dense #navigation (click)="handleNavigation($event)">
             <a mat-list-item [routerLink]="['/main/quest']"> Dobrodružství </a>
             <a mat-list-item [routerLink]="['/main/dungeon']"> Jeskyně </a>
             <mat-divider></mat-divider>

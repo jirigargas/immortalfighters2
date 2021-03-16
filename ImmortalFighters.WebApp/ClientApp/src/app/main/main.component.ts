@@ -10,6 +10,8 @@ import { SignOut } from '../core/store/actions/authentication.actions';
 })
 export class MainComponent implements OnInit {
 
+  module: string = "";
+
   constructor(private store: Store, private router: Router) { }
 
   ngOnInit(): void {
@@ -17,7 +19,12 @@ export class MainComponent implements OnInit {
 
   signOut() {
     this.store.dispatch(new SignOut());
-    // this.router.navigate(['/']);
+  }
 
+  handleNavigation(event: Event) {
+    if (event.target instanceof HTMLElement) {
+      var item = event.target as HTMLElement;
+      this.module = item.innerText;
+    }
   }
 }
