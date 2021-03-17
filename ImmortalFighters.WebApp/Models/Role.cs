@@ -8,5 +8,6 @@ namespace ImmortalFighters.WebApp.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public ICollection<UserRole> UserRoles { get; set; }
+        public ICollection<ForumRoleAccessRight> ForumRoleAccessRights { get; set; }
     }
 }

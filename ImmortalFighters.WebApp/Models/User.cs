@@ -17,6 +17,9 @@ namespace ImmortalFighters.WebApp.Models
         public ICollection<Character> Characters { get; set; }
         public ICollection<Quest> OrganizedQuests { get; set; }
         public ICollection<QuestEntry> QuestEntries { get; set; }
+        public ICollection<Forum> CreatedForums { get; set; }
+        public ICollection<ForumUserAccessRight> ForumUserAccessRights { get; set; }
+        public ICollection<ForumEntry> ForumEntries { get; set; }
     }
 
     public enum AccountStatus

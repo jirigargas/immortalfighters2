@@ -19,6 +19,30 @@ namespace ImmortalFighters.WebApp.Migrations
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("ImmortalFighters.WebApp.Models.AccessRight", b =>
+                {
+                    b.Property<int>("AccessRightId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("CanRead")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanWrite")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AccessRightId");
+
+                    b.ToTable("AccessRights");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("AccessRight");
+                });
+
             modelBuilder.Entity("ImmortalFighters.WebApp.Models.Character", b =>
                 {
                     b.Property<int>("CharacterId")
@@ -50,13 +74,58 @@ namespace ImmortalFighters.WebApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("ForumId");
 
+                    b.HasIndex("CreatedById");
+
                     b.ToTable("Forums");
+                });
+
+            modelBuilder.Entity("ImmortalFighters.WebApp.Models.ForumEntry", b =>
+                {
+                    b.Property<int>("ForumEntryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("Changed")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ForumId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ForumEntryId");
+
+                    b.HasIndex("ForumId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ForumEntries");
                 });
 
             modelBuilder.Entity("ImmortalFighters.WebApp.Models.Quest", b =>
@@ -100,6 +169,9 @@ namespace ImmortalFighters.WebApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("Changed")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("CharacterId")
                         .HasColumnType("int");
@@ -202,6 +274,42 @@ namespace ImmortalFighters.WebApp.Migrations
                     b.ToTable("UserRoles");
                 });
 
+            modelBuilder.Entity("ImmortalFighters.WebApp.Models.ForumAccessRight", b =>
+                {
+                    b.HasBaseType("ImmortalFighters.WebApp.Models.AccessRight");
+
+                    b.Property<int>("ForumId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("ForumId");
+
+                    b.HasDiscriminator().HasValue("ForumAccessRight");
+                });
+
+            modelBuilder.Entity("ImmortalFighters.WebApp.Models.ForumRoleAccessRight", b =>
+                {
+                    b.HasBaseType("ImmortalFighters.WebApp.Models.ForumAccessRight");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasDiscriminator().HasValue("ForumRoleAccessRight");
+                });
+
+            modelBuilder.Entity("ImmortalFighters.WebApp.Models.ForumUserAccessRight", b =>
+                {
+                    b.HasBaseType("ImmortalFighters.WebApp.Models.ForumAccessRight");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("UserId");
+
+                    b.HasDiscriminator().HasValue("ForumUserAccessRight");
+                });
+
             modelBuilder.Entity("ImmortalFighters.WebApp.Models.Character", b =>
                 {
                     b.HasOne("ImmortalFighters.WebApp.Models.User", "User")
@@ -209,6 +317,36 @@ namespace ImmortalFighters.WebApp.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ImmortalFighters.WebApp.Models.Forum", b =>
+                {
+                    b.HasOne("ImmortalFighters.WebApp.Models.User", "CreatedBy")
+                        .WithMany("CreatedForums")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("ImmortalFighters.WebApp.Models.ForumEntry", b =>
+                {
+                    b.HasOne("ImmortalFighters.WebApp.Models.Forum", "Forum")
+                        .WithMany("ForumEntries")
+                        .HasForeignKey("ForumId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("ImmortalFighters.WebApp.Models.User", "User")
+                        .WithMany("ForumEntries")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Forum");
 
                     b.Navigation("User");
                 });
@@ -287,11 +425,51 @@ namespace ImmortalFighters.WebApp.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ImmortalFighters.WebApp.Models.ForumAccessRight", b =>
+                {
+                    b.HasOne("ImmortalFighters.WebApp.Models.Forum", "Forum")
+                        .WithMany("AccessRights")
+                        .HasForeignKey("ForumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Forum");
+                });
+
+            modelBuilder.Entity("ImmortalFighters.WebApp.Models.ForumRoleAccessRight", b =>
+                {
+                    b.HasOne("ImmortalFighters.WebApp.Models.Role", "Role")
+                        .WithMany("ForumRoleAccessRights")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("ImmortalFighters.WebApp.Models.ForumUserAccessRight", b =>
+                {
+                    b.HasOne("ImmortalFighters.WebApp.Models.User", "User")
+                        .WithMany("ForumUserAccessRights")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ImmortalFighters.WebApp.Models.Character", b =>
                 {
                     b.Navigation("QuestCharacters");
 
                     b.Navigation("QuestEntries");
+                });
+
+            modelBuilder.Entity("ImmortalFighters.WebApp.Models.Forum", b =>
+                {
+                    b.Navigation("AccessRights");
+
+                    b.Navigation("ForumEntries");
                 });
 
             modelBuilder.Entity("ImmortalFighters.WebApp.Models.Quest", b =>
@@ -303,12 +481,20 @@ namespace ImmortalFighters.WebApp.Migrations
 
             modelBuilder.Entity("ImmortalFighters.WebApp.Models.Role", b =>
                 {
+                    b.Navigation("ForumRoleAccessRights");
+
                     b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("ImmortalFighters.WebApp.Models.User", b =>
                 {
                     b.Navigation("Characters");
+
+                    b.Navigation("CreatedForums");
+
+                    b.Navigation("ForumEntries");
+
+                    b.Navigation("ForumUserAccessRights");
 
                     b.Navigation("OrganizedQuests");
 

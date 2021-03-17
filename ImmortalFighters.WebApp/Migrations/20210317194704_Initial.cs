@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ImmortalFighters.WebApp.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -60,6 +60,28 @@ namespace ImmortalFighters.WebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Forums",
+                columns: table => new
+                {
+                    ForumId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedById = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Forums", x => x.ForumId);
+                    table.ForeignKey(
+                        name: "FK_Forums_Users_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "Users",
+                        principalColumn: "UserId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Quests",
                 columns: table => new
                 {
@@ -102,6 +124,72 @@ namespace ImmortalFighters.WebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AccessRights",
+                columns: table => new
+                {
+                    AccessRightId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CanRead = table.Column<bool>(type: "bit", nullable: false),
+                    CanWrite = table.Column<bool>(type: "bit", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ForumId = table.Column<int>(type: "int", nullable: true),
+                    RoleId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccessRights", x => x.AccessRightId);
+                    table.ForeignKey(
+                        name: "FK_AccessRights_Forums_ForumId",
+                        column: x => x.ForumId,
+                        principalTable: "Forums",
+                        principalColumn: "ForumId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AccessRights_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "RoleId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AccessRights_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ForumEntries",
+                columns: table => new
+                {
+                    ForumEntryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Changed = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ForumId = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ForumEntries", x => x.ForumEntryId);
+                    table.ForeignKey(
+                        name: "FK_ForumEntries_Forums_ForumId",
+                        column: x => x.ForumId,
+                        principalTable: "Forums",
+                        principalColumn: "ForumId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ForumEntries_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "QuestCharacters",
                 columns: table => new
                 {
@@ -131,6 +219,7 @@ namespace ImmortalFighters.WebApp.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Changed = table.Column<DateTime>(type: "datetime2", nullable: true),
                     QuestId = table.Column<int>(type: "int", nullable: false),
                     CharacterId = table.Column<int>(type: "int", nullable: true),
                     CreatedById = table.Column<int>(type: "int", nullable: false)
@@ -157,9 +246,39 @@ namespace ImmortalFighters.WebApp.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AccessRights_ForumId",
+                table: "AccessRights",
+                column: "ForumId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccessRights_RoleId",
+                table: "AccessRights",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccessRights_UserId",
+                table: "AccessRights",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Characters_UserId",
                 table: "Characters",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ForumEntries_ForumId",
+                table: "ForumEntries",
+                column: "ForumId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ForumEntries_UserId",
+                table: "ForumEntries",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Forums_CreatedById",
+                table: "Forums",
+                column: "CreatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuestCharacters_CharacterId",
@@ -207,6 +326,12 @@ namespace ImmortalFighters.WebApp.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AccessRights");
+
+            migrationBuilder.DropTable(
+                name: "ForumEntries");
+
+            migrationBuilder.DropTable(
                 name: "QuestCharacters");
 
             migrationBuilder.DropTable(
@@ -214,6 +339,9 @@ namespace ImmortalFighters.WebApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserRoles");
+
+            migrationBuilder.DropTable(
+                name: "Forums");
 
             migrationBuilder.DropTable(
                 name: "Characters");
