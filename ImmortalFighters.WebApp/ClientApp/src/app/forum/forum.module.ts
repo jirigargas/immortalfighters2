@@ -7,6 +7,7 @@ import { SharedModule } from '../shared/shared.module';
 import { ForumListComponent } from './forum-list/forum-list.component';
 import { ForumDetailComponent } from './forum-detail/forum-detail.component';
 import { MatListModule } from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { MatListModule } from '@angular/material/list';
     CommonModule,
     ForumRoutingModule,
     MatListModule,
+    MatButtonModule,
     SharedModule
   ]
 })
