@@ -1,4 +1,5 @@
-﻿using ImmortalFighters.WebApp.ApiModels;
+﻿using AutoMapper;
+using ImmortalFighters.WebApp.ApiModels;
 using ImmortalFighters.WebApp.Helpers;
 using ImmortalFighters.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -12,22 +13,18 @@ namespace ImmortalFighters.WebApp.Controllers
     public class ForumController : ControllerBase
     {
         private readonly IForumService _forumService;
+        private readonly IMapper _mapper;
 
-        public ForumController(IForumService forumService)
+        public ForumController(IForumService forumService, IMapper mapper)
         {
             _forumService = forumService;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            var response = _forumService.GetAll()
-                .Select(forum => new ForumResponse
-                {
-                    ForumId = forum.ForumId,
-                    Name = forum.Name,
-                    Category = forum.Category
-                }); // TODO do this using automapper;
+            var response = _forumService.GetAll().Select(x => _mapper.Map<ForumResponse>(x));
             return Ok(response);
         }
 
@@ -44,13 +41,7 @@ namespace ImmortalFighters.WebApp.Controllers
         public IActionResult Post(CreateNewForumRequest request)
         {
             var forum = _forumService.Create(request);
-            var response = new ForumResponse
-            {
-                ForumId = forum.ForumId,
-                Name = forum.Name,
-                Category = forum.Category
-            }; // TODO do this using automapper
-
+            var response = _mapper.Map<ForumResponse>(forum);
             return Ok(response);
         }
 

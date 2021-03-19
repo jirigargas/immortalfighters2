@@ -26,6 +26,7 @@ namespace ImmortalFighters.WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpContextAccessor();
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews(options => options.Filters.Add(new ApiResponseExceptionFilter()));
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
