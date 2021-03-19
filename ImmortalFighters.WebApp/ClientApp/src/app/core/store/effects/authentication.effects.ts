@@ -4,13 +4,15 @@ import { AuthenticationStoreTypes, SignedIn, SignIn, SignUp } from "../actions/a
 import { map, switchMap, tap } from "rxjs/operators";
 import { UsersApiService } from "../../services/users-api.service";
 import { Router } from "@angular/router";
+import { SnackbarService } from "../../services/snackbar.service";
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationEffects {
     constructor(
         private actions$: Actions,
         private usersApi: UsersApiService,
-        private router: Router) {
+        private router: Router,
+        private snackbarService: SnackbarService) {
     }
 
     $signUp = createEffect(
@@ -18,6 +20,7 @@ export class AuthenticationEffects {
             ofType(AuthenticationStoreTypes.signUp),
             map((x: SignUp) => x.payload),
             switchMap(x => this.usersApi.register(x)),
+            tap(() => this.snackbarService.notifySuccess("A je to! Zaregistrovali jsem tě!")),
             tap(() => this.router.navigate(['/authentication/signin']))
         ),
         { dispatch: false }

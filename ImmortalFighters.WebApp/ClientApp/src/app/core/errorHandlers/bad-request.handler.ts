@@ -1,25 +1,20 @@
 
 import { HttpErrorResponse } from "@angular/common/http";
 import { ErrorHandler, Injectable } from "@angular/core";
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarService } from "../services/snackbar.service";
 
 @Injectable({
     providedIn: 'root'
-  })
+})
 export class BadRequestErrorHandler implements ErrorHandler {
 
-    constructor(private snackBar: MatSnackBar) { }
+    constructor(private snackbarService: SnackbarService) { }
 
     handleError(error: Error) {
         if (error instanceof HttpErrorResponse && error.status === 400) {
-            this.snackBar.open("A sakra! " + error.error, "OK", {
-                duration: 3000,
-                panelClass: ['red-snackbar'],
-                horizontalPosition: "center",
-                verticalPosition: "bottom",
-              })
+            this.snackbarService.notifyError("A sakra! " + error.error);
         } else {
-            throw (error)
+            throw (error);
         }
     }
 }
