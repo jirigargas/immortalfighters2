@@ -2,7 +2,7 @@
 using ImmortalFighters.WebApp.Helpers;
 using ImmortalFighters.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using System.Linq;
 
 namespace ImmortalFighters.WebApp.Controllers
 {
@@ -21,7 +21,21 @@ namespace ImmortalFighters.WebApp.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var response = _forumService.GetAll();
+            var response = _forumService.GetAll()
+                .Select(forum => new ForumResponse
+                {
+                    ForumId = forum.ForumId,
+                    Name = forum.Name,
+                    Category = forum.Category
+                }); // TODO do this using automapper;
+            return Ok(response);
+        }
+
+        [HttpGet("[action]")]
+        [AuthorizeRoles(Consts.RoleModerator)]
+        public IActionResult Categories()
+        {
+            var response = _forumService.GetAllCategories();
             return Ok(response);
         }
 
@@ -29,7 +43,15 @@ namespace ImmortalFighters.WebApp.Controllers
         [AuthorizeRoles(Consts.RoleModerator)]
         public IActionResult Post(CreateNewForumRequest request)
         {
-            throw new NotImplementedException();
+            var forum = _forumService.Create(request);
+            var response = new ForumResponse
+            {
+                ForumId = forum.ForumId,
+                Name = forum.Name,
+                Category = forum.Category
+            }; // TODO do this using automapper
+
+            return Ok(response);
         }
 
     }

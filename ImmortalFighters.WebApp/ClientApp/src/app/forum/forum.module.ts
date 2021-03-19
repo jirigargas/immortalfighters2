@@ -8,15 +8,24 @@ import { ForumListComponent } from './forum-list/forum-list.component';
 import { ForumDetailComponent } from './forum-detail/forum-detail.component';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { CreateForumComponent } from './create-forum/create-forum.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
 
 
 @NgModule({
-  declarations: [ForumComponent, ForumListComponent, ForumDetailComponent],
+  declarations: [ForumComponent, ForumListComponent, ForumDetailComponent, CreateForumComponent],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     ForumRoutingModule,
     MatListModule,
     MatButtonModule,
+    MatDialogModule,
+    MatAutocompleteModule,
+    MatInputModule,
     SharedModule
   ]
 })

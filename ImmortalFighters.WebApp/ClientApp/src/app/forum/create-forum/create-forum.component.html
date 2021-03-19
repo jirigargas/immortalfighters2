@@ -1,0 +1,33 @@
+<form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <mat-form-field class="full-width">
+        <mat-label>Název</mat-label>
+        <input type="text" matInput formControlName="name" [errorStateMatcher]="matcher">
+        <mat-error *ngIf="form.controls['name'].hasError('required')">
+            Název fóra je vyžadovaný
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+        <mat-label>Kategorie</mat-label>
+        <input type="text"
+               placeholder="Vyber nebo vytvoř kategorii"
+               aria-label="Kategorie"
+               matInput
+               formControlName="category"
+               [matAutocomplete]="auto" 
+               [errorStateMatcher]="matcher">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of categories$ | async" [value]="option">
+            {{option}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="form.controls['category'].hasError('required')">
+            Kategorie fóra je vyžadovaná
+        </mat-error>
+      </mat-form-field>
+
+    <button mat-button mat-dialog-close>Zpět</button>
+    <button type="submit" [disabled]="!form.valid" mat-raised-button color="accent">Vytvořit fórum</button>
+
+</form>

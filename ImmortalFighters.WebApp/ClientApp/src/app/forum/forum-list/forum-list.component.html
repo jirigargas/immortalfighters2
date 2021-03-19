@@ -1,6 +1,6 @@
 <div class="forum-container">
     <div class="forum-options">
-        <button mat-raised-button color="accent" >Přidat nové fórum</button>
+        <button mat-raised-button color="accent" (click)="onClickCreateForum()">Přidat nové fórum</button>
     </div>
     <mat-selection-list #forums [multiple]="false" dense>
         <mat-list-option *ngFor="let forum of forums$ | async" [value]="forum" [routerLink]="[forum.forumId]">

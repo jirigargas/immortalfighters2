@@ -15,4 +15,12 @@ export class ForumApiService {
         return this.httpClient.get<Forum[]>(this.baseUrl + "Forum");
     }
 
+    getAllCategories(): Observable<string[]> {
+        return this.httpClient.get<string[]>(this.baseUrl + "Forum/Categories");
+    }
+
+    createNewForum(newForum: Forum): Observable<Forum> {
+        return this.httpClient.post<Forum>(this.baseUrl + "Forum", newForum);
+    }
+
 }
