@@ -7,19 +7,19 @@ using System.Linq;
 
 namespace ImmortalFighters.WebApp.Services
 {
-    public interface IForumService
+    public interface IForumRepository
     {
         IEnumerable<Forum> GetAll();
         IEnumerable<string> GetAllCategories();
         Forum Create(CreateNewForumRequest request);
     }
 
-    public class ForumService : IForumService
+    public class ForumRepository : IForumRepository
     {
         private readonly IfDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ForumService(IfDbContext context, IHttpContextAccessor httpContextAccessor)
+        public ForumRepository(IfDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;

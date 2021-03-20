@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using ImmortalFighters.WebApp.ApiModels;
-using ImmortalFighters.WebApp.Models;
 
 namespace ImmortalFighters.WebApp.AutoMapper
 {
@@ -8,7 +6,7 @@ namespace ImmortalFighters.WebApp.AutoMapper
     {
         public ForumProfile()
         {
-            CreateMap<Forum, ForumResponse>();
+            CreateMap<Models.Forum, ApiModels.ForumResponse>();
         }
     }
 }

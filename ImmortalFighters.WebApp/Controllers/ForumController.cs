@@ -12,10 +12,10 @@ namespace ImmortalFighters.WebApp.Controllers
     [Route("[controller]")]
     public class ForumController : ControllerBase
     {
-        private readonly IForumService _forumService;
+        private readonly IForumRepository _forumService;
         private readonly IMapper _mapper;
 
-        public ForumController(IForumService forumService, IMapper mapper)
+        public ForumController(IForumRepository forumService, IMapper mapper)
         {
             _forumService = forumService;
             _mapper = mapper;

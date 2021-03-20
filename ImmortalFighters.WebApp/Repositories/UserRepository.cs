@@ -11,55 +11,29 @@ using BC = BCrypt.Net.BCrypt;
 
 namespace ImmortalFighters.WebApp.Services
 {
-    public interface IUsersService
+    public interface IUserRepository
     {
-        LoginResponse Authenticate(LoginRequest request);
         Task<User> Register(RegisterRequest request);
-        User GetById(int id);
+        User GetBy(Func<User, bool> filter);
     }
 
-    public class UsersService : IUsersService
+    public class UserRepository : IUserRepository
     {
         private readonly IfDbContext _context;
-        private readonly IAuthenticationProvider _authenticationProvider;
         private readonly IMediator _mediator;
 
-        public UsersService(IfDbContext context, IAuthenticationProvider authenticationProvider, IMediator mediator)
+        public UserRepository(IfDbContext context, IMediator mediator)
         {
             _context = context;
-            _authenticationProvider = authenticationProvider;
             _mediator = mediator;
         }
 
-        public LoginResponse Authenticate(LoginRequest request)
-        {
-            var user = _context.Users
-                .Include(x => x.UserRoles)
-                .ThenInclude(x => x.Role)
-                .SingleOrDefault(x => x.Email == request.Email);
-
-            if (user == null) throw new ApiResponseException { StatusCode = 400, ClientMessage = "Tebe neznám" };
-
-            var isPasswordValid = BC.Verify(request.Password, user.Password);
-
-            if (!isPasswordValid) throw new ApiResponseException { StatusCode = 400, ClientMessage = "Tebe neznám" };
-
-            var token = _authenticationProvider.GetToken(user);
-
-            return new LoginResponse
-            {
-                Token = token,
-                Username = user.Username,
-                Roles = user.UserRoles.Select(x => x.Role.Name).ToList()
-            };
-        }
-
-        public User GetById(int id)
+        public User GetBy(Func<User, bool> filter)
         {
             return _context.Users
-                .Include(x => x.UserRoles)
-                .ThenInclude(x => x.Role)
-                .FirstOrDefault(x => x.UserId == id);
+               .Include(x => x.UserRoles)
+               .ThenInclude(x => x.Role)
+               .SingleOrDefault(filter);
         }
 
         public async Task<User> Register(RegisterRequest request)
@@ -74,7 +48,7 @@ namespace ImmortalFighters.WebApp.Services
             if (userWithSameUsername != null)
                 throw new ApiResponseException { StatusCode = 400, ClientMessage = "Zadané jméno už se používá" };
 
-            var hashPassword = BC.HashPassword(request.Password);
+            var hashPassword = BC.HashPassword(request.Password); // TODO move to auth provider?!
             var user = new User
             {
                 Username = request.Username,

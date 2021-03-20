@@ -1,6 +1,7 @@
 using ImmortalFighters.WebApp.Helpers;
 using ImmortalFighters.WebApp.Middlewares;
 using ImmortalFighters.WebApp.Models;
+using ImmortalFighters.WebApp.Repositories;
 using ImmortalFighters.WebApp.Services;
 using ImmortalFighters.WebApp.Settings;
 using MediatR;
@@ -42,8 +43,11 @@ namespace ImmortalFighters.WebApp
             services.Configure<SecurityOptions>(options => Configuration.GetSection("Security").Bind(options));
             services.Configure<SmtpOptions>(options => Configuration.GetSection("Smtp").Bind(options));
 
-            services.AddScoped<IUsersService, UsersService>();
-            services.AddScoped<IForumService, ForumService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IForumRepository, ForumRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IAuthenticationProvider, AuthenticationProvider>();
         }
 

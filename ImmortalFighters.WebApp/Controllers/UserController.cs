@@ -9,18 +9,20 @@ namespace ImmortalFighters.WebApp.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IUsersService _usersService;
+        private readonly IUserRepository _usersService;
+        private readonly IAuthenticationService _authService;
 
-        public UserController(IUsersService usersService)
+        public UserController(IUserRepository usersService, IAuthenticationService authService)
         {
             _usersService = usersService;
+            _authService = authService;
         }
 
         [HttpPost]
         [Route("[action]")]
         public IActionResult Login(LoginRequest args)
         {
-            var response = _usersService.Authenticate(args);
+            var response = _authService.Authenticate(args);
             return Ok(response);
         }
 
