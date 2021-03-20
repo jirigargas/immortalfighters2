@@ -12,4 +12,5 @@ export class SignInRequest {
 export class SignInResponse {
     username: string = "";
     token: string = "";
+    roles: string[] = [];
 }

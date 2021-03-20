@@ -15,7 +15,6 @@ export class BadRequestInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         return next.handle(request).pipe(
             catchError((error: HttpErrorResponse) => {
-                debugger;
                 if (error.status === 400) {
                     console.warn("bad request intercepted", error)
                     this.snackbarService.notifyError("A sakra! " + error.error);

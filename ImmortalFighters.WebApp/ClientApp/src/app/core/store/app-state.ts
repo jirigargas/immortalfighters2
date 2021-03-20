@@ -8,6 +8,7 @@ export interface AppState {
 export interface AuthenticationState {
     token: string;
     username: string;
+    roles: string[];
 }
 
 export const reducers: ActionReducerMap<AppState> = {

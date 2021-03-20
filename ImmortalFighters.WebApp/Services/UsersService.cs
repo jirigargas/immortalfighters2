@@ -33,7 +33,10 @@ namespace ImmortalFighters.WebApp.Services
 
         public LoginResponse Authenticate(LoginRequest request)
         {
-            var user = _context.Users.SingleOrDefault(x => x.Email == request.Email);
+            var user = _context.Users
+                .Include(x => x.UserRoles)
+                .ThenInclude(x => x.Role)
+                .SingleOrDefault(x => x.Email == request.Email);
 
             if (user == null) throw new ApiResponseException { StatusCode = 400, ClientMessage = "Tebe neznám" };
 
@@ -46,7 +49,8 @@ namespace ImmortalFighters.WebApp.Services
             return new LoginResponse
             {
                 Token = token,
-                Username = user.Username
+                Username = user.Username,
+                Roles = user.UserRoles.Select(x => x.Role.Name).ToList()
             };
         }
 
