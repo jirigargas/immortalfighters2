@@ -49,6 +49,7 @@ namespace ImmortalFighters.WebApp.Services
                 throw new ApiResponseException { StatusCode = 400, ClientMessage = "Zadané jméno už se používá" };
 
             var hashPassword = BC.HashPassword(request.Password); // TODO move to auth provider?!
+
             var user = new User
             {
                 Username = request.Username,
@@ -58,6 +59,10 @@ namespace ImmortalFighters.WebApp.Services
                 Status = AccountStatus.NotVerified
             };
             _context.Users.Add(user);
+
+            var playerBasicRole = _context.Roles.Single(x => x.Name == Consts.RolePlayer);
+            _context.UserRoles.Add(new UserRole { User = user, Role = playerBasicRole });
+
             _context.SaveChanges();
 
             var message = new RegistrationEmailMessage(user);

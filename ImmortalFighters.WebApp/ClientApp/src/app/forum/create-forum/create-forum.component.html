@@ -23,8 +23,23 @@
   </mat-form-field>
 
   <div formArrayName="roles">
-    <div *ngFor="let role of getRoleControls(); index as roleIndex" [formGroupName]="roleIndex">
-      {{getRoleName(roleIndex)}}
+    <div *ngFor="let role of getRoleControls(); index as roleIndex" [formGroupName]="roleIndex" class="full-width">
+      <div class="role-row">
+        <span class="fixed-width">{{getRoleName(roleIndex)}}</span>
+
+        <input type="hidden" formControlName="roleId" />
+
+        <div class="fixed-width role-row">
+          <mat-label class="margin-right">Čtení</mat-label>
+          <mat-checkbox formControlName="canRead"></mat-checkbox>
+        </div>
+
+        <div class="role-row">
+          <mat-label class="margin-right">Zápis</mat-label>
+          <mat-checkbox formControlName="canWrite"></mat-checkbox>
+        </div>
+      </div>
+      <mat-divider class="margin-bottom margin-top"></mat-divider>
     </div>
   </div>
 

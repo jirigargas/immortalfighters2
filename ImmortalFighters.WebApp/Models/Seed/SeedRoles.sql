@@ -1,6 +1,7 @@
 ﻿insert into Roles values
 ('Admin', 'administrátor'),
-('Patron', 'uživatel s placeným účtem'),
+('Hráč', 'registrovaný uživatel bez placeného účtu'),
+('Patron', 'registrovaný uživatel s placeným účtem'),
 ('Moderátor', 'administrátor fór'),
 ('Ekonom', 'administrátor obchodů'),
 ('Dozorce', 'administrátor dobrodružství'),

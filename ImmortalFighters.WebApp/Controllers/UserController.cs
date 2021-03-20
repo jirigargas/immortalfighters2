@@ -30,8 +30,8 @@ namespace ImmortalFighters.WebApp.Controllers
         [Route("[action]")]
         public async Task<IActionResult> Register(RegisterRequest args)
         {
-            var response = await _usersService.Register(args);
-            return Ok(response);
+            await _usersService.Register(args);
+            return Ok();
         }
     }
 }
