@@ -14,7 +14,7 @@ export const authenticationReducer = (state = initialState, action: Action): Aut
             var response = (action as SignedIn).payload;
             return { ...state, token: response.token, username: response.username, roles: response.roles };
         case AuthenticationStoreTypes.signOut:
-            return { ...state, token: "", username: "" };
+            return { ...state, token: "", username: "", roles: [] };
         default:
             return state;
     }

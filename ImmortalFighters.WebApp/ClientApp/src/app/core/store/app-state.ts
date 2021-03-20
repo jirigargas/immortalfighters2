@@ -1,4 +1,5 @@
 import { ActionReducer, ActionReducerMap, MetaReducer } from "@ngrx/store";
+import { localStorageSync } from "ngrx-store-localstorage";
 import { authenticationReducer } from "./reducers/authentication.reducer";
 
 export interface AppState {
@@ -27,4 +28,11 @@ export const debugState = (reducer: ActionReducer<any>): ActionReducer<any> => (
     return reducer(state, action);
 };
 
-export const metaReducers: Array<MetaReducer<any, any>> = [debugState, debugActions];
+export const localStorageSyncReducer = (reducer: ActionReducer<any>): ActionReducer<any> => localStorageSync({
+    keys: [
+        { authenticationState: ['token', 'username', 'roles'] }
+    ],
+    rehydrate: true
+})(reducer);
+
+export const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];

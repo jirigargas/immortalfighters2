@@ -10,7 +10,8 @@ export class CanLoadMainSectionGuard implements CanLoad {
   }
 
   canLoad(route: Route, segments: UrlSegment[]): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-    var token = sessionStorage.getItem("token");
+    var state = localStorage.getItem("authenticationState") ?? "{}";
+    var token = JSON.parse(state).token;
     if (token && token !== "") {
       return true;
     }

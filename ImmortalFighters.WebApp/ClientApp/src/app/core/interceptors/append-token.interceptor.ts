@@ -11,7 +11,8 @@ export class AppendTokenInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    var token = sessionStorage.getItem("token");
+    var state = localStorage.getItem("authenticationState") ?? "{}";
+    var token = JSON.parse(state).token;
     if (token && token !== "") {
       request = request.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
     }

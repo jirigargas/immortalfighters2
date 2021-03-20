@@ -31,7 +31,6 @@ export class AuthenticationEffects {
             ofType(AuthenticationStoreTypes.signIn),
             map((x: SignIn) => x.payload),
             switchMap(x => this.userApi.login(x)),
-            tap(x => sessionStorage.setItem("token", x.token)),
             switchMap(x => [new SignedIn(x)])
         )
     );
@@ -47,7 +46,6 @@ export class AuthenticationEffects {
     $signOut = createEffect(
         () => this.actions$.pipe(
             ofType(AuthenticationStoreTypes.signOut),
-            tap(x => sessionStorage.setItem("token", "")),
             tap(() => this.router.navigate(['/']))
         ),
         { dispatch: false }
