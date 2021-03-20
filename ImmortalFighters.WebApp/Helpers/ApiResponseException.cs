@@ -10,6 +10,8 @@ namespace ImmortalFighters.WebApp.Helpers
 
         public ApiResponseException()
         {
+            StatusCode = 400;
+            ClientMessage = "Tohle bude nějaká zlá chyba ...";
         }
 
         public ApiResponseException(string message) : base(message)

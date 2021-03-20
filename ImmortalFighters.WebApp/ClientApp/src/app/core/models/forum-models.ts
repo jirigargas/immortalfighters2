@@ -3,3 +3,8 @@ export class Forum {
     name: string = "";
     category: string = "";
 }
+
+export class ForumsGroupedByCategory {
+    category: string = "";
+    forums: Forum[] = [];
+}

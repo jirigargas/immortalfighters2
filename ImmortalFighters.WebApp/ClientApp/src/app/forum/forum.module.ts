@@ -13,6 +13,7 @@ import { CreateForumComponent } from './create-forum/create-forum.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { MatInputModule } from '@angular/material/input';
     MatDialogModule,
     MatAutocompleteModule,
     MatInputModule,
+    MatExpansionModule,
     SharedModule
   ]
 })

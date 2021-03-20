@@ -32,7 +32,6 @@ namespace ImmortalFighters.WebApp.Services
 
         public string GetToken(User user)
         {
-            // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_securityOptions.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Forum } from '../models/forum-models';
+import { Forum, ForumsGroupedByCategory } from '../models/forum-models';
 
 @Injectable({
     providedIn: 'root'
@@ -13,6 +13,10 @@ export class ForumApiService {
 
     getAll(): Observable<Forum[]> {
         return this.httpClient.get<Forum[]>(this.baseUrl + "Forum");
+    }
+
+    getAllGroupedByCategory(): Observable<ForumsGroupedByCategory[]> {
+        return this.httpClient.get<ForumsGroupedByCategory[]>(this.baseUrl + "Forum/GroupedByCategory");
     }
 
     getAllCategories(): Observable<string[]> {

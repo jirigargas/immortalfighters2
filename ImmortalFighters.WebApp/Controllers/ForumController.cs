@@ -29,6 +29,21 @@ namespace ImmortalFighters.WebApp.Controllers
         }
 
         [HttpGet("[action]")]
+        public IActionResult GroupedByCategory()
+        {
+            var response = _forumService.GetAll()
+                .Select(x => _mapper.Map<ForumResponse>(x))
+                .GroupBy(x => x.Category)
+                .Select(x => new ForumsGroupedByCategory
+                {
+                    Category = x.Key,
+                    Forums = x.ToList()
+                });
+
+            return Ok(response);
+        }
+
+        [HttpGet("[action]")]
         [AuthorizeRoles(Consts.RoleModerator)]
         public IActionResult Categories()
         {
