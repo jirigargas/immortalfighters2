@@ -64,4 +64,10 @@ export class CreateForumComponent implements OnInit {
     var roleArray = <FormArray>this.form.get('roles');
     return roleArray.controls;
   }
+
+  getRoleName(index: number) {
+    var roleArray = <FormArray>this.form.get('roles');
+    var roleGroup = <FormGroup>roleArray.controls[index];
+    return roleGroup.get('name')?.value;
+  }
 }

@@ -24,7 +24,7 @@
 
   <div formArrayName="roles">
     <div *ngFor="let role of getRoleControls(); index as roleIndex" [formGroupName]="roleIndex">
-      <input type="text" formControlName="name" />
+      {{getRoleName(roleIndex)}}
     </div>
   </div>
 
