@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { AuthenticationStoreTypes, SignedIn, SignIn, SignUp } from "../actions/authentication.actions";
 import { map, switchMap, tap } from "rxjs/operators";
-import { UsersApiService } from "../../services/users-api.service";
+import { UserApiService } from "../../services/user-api.service";
 import { Router } from "@angular/router";
 import { SnackbarService } from "../../services/snackbar.service";
 
@@ -10,7 +10,7 @@ import { SnackbarService } from "../../services/snackbar.service";
 export class AuthenticationEffects {
     constructor(
         private actions$: Actions,
-        private usersApi: UsersApiService,
+        private userApi: UserApiService,
         private router: Router,
         private snackbarService: SnackbarService) {
     }
@@ -19,7 +19,7 @@ export class AuthenticationEffects {
         () => this.actions$.pipe(
             ofType(AuthenticationStoreTypes.signUp),
             map((x: SignUp) => x.payload),
-            switchMap(x => this.usersApi.register(x)),
+            switchMap(x => this.userApi.register(x)),
             tap(() => this.snackbarService.notifySuccess("A je to! Zaregistrovali jsem tě!")),
             tap(() => this.router.navigate(['/authentication/signin']))
         ),
@@ -30,7 +30,7 @@ export class AuthenticationEffects {
         () => this.actions$.pipe(
             ofType(AuthenticationStoreTypes.signIn),
             map((x: SignIn) => x.payload),
-            switchMap(x => this.usersApi.login(x)),
+            switchMap(x => this.userApi.login(x)),
             tap(x => sessionStorage.setItem("token", x.token)),
             switchMap(x => [new SignedIn(x)])
         )

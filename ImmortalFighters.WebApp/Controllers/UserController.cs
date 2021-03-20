@@ -7,11 +7,11 @@ namespace ImmortalFighters.WebApp.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUsersService _usersService;
 
-        public UsersController(IUsersService usersService)
+        public UserController(IUsersService usersService)
         {
             _usersService = usersService;
         }

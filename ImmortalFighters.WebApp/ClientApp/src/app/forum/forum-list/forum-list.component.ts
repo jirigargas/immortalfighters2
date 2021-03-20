@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
-import { Forum, ForumsGroupedByCategory } from '../../core/models/forum-models';
+import { ForumsGroupedByCategory } from '../../core/models/forum-models';
 import { ForumApiService } from '../../core/services/forum-api.service';
 import { SnackbarService } from '../../core/services/snackbar.service';
 import { AppState } from '../../core/store/app-state';
