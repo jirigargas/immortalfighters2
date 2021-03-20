@@ -37,7 +37,8 @@ export class ForumListComponent implements OnInit {
       .pipe(
         filter(x => !!x),
         switchMap(x => this.forumApi.createNewForum(x)),
-        tap(x => this.snackbarService.notifySuccess("Fórum " + x.name + " vytvořeno!"))
+        tap(x => this.snackbarService.notifySuccess("Fórum " + x.name + " vytvořeno!")),
+        tap(() => this.forumsGroupedByCategory$ = this.forumApi.getAllGroupedByCategory()) // reload new data
       )
       .subscribe();
   }

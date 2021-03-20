@@ -18,7 +18,7 @@ export class CreateForumComponent implements OnInit {
   form = new FormGroup({
     name: new FormControl('', [Validators.required]),
     category: new FormControl('', [Validators.required]),
-    roles: new FormArray([])
+    accessRights: new FormArray([])
   });
 
   matcher = new InvalidStateMatcher();
@@ -33,7 +33,7 @@ export class CreateForumComponent implements OnInit {
     this.roleApi.getAll()
       .pipe(
         tap(roles => {
-          var formArray = this.form.get('roles') as FormArray;
+          var formArray = this.form.get('accessRights') as FormArray;
           roles.forEach(role => {
             formArray.push(this.createRoleFormItem(role));
           });
@@ -55,18 +55,18 @@ export class CreateForumComponent implements OnInit {
     return this.formBuilder.group({
       roleId: role.roleId,
       name: role.name,
-      canRead: '',
-      canWrite: ''
+      canRead: false,
+      canWrite: false
     });
   }
 
   getRoleControls(): AbstractControl[] {
-    var roleArray = <FormArray>this.form.get('roles');
+    var roleArray = <FormArray>this.form.get('accessRights');
     return roleArray.controls;
   }
 
   getRoleName(index: number) {
-    var roleArray = <FormArray>this.form.get('roles');
+    var roleArray = <FormArray>this.form.get('accessRights');
     var roleGroup = <FormGroup>roleArray.controls[index];
     return roleGroup.get('name')?.value;
   }

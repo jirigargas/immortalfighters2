@@ -35,8 +35,29 @@ namespace ImmortalFighters.WebApp.Services
                 CreatedBy = (User)_httpContextAccessor.HttpContext.Items["User"],
                 Status = ForumStatus.Active
             };
-            // TODO Add accessRights!
             _context.Forums.Add(newForum);
+
+            foreach (var accessRight in request.AccessRights)
+            {
+                var forumRoleAccessRight = new ForumRoleAccessRight
+                {
+                    Forum = newForum,
+                    RoleId = accessRight.RoleId,
+                    CanRead = accessRight.CanRead,
+                    CanWrite = accessRight.CanWrite
+                };
+                _context.ForumRoleAccessRights.Add(forumRoleAccessRight);
+            }
+
+            var adminRoleAccessRight = new ForumRoleAccessRight
+            {
+                Forum = newForum,
+                Role = _context.Roles.Single(x => x.Name == Consts.RoleAdmin),
+                CanRead = true,
+                CanWrite = true
+            };
+            _context.ForumRoleAccessRights.Add(adminRoleAccessRight);
+
             _context.SaveChanges();
             return newForum;
         }

@@ -22,7 +22,7 @@
     </mat-error>
   </mat-form-field>
 
-  <div formArrayName="roles">
+  <div formArrayName="accessRights">
     <div *ngFor="let role of getRoleControls(); index as roleIndex" [formGroupName]="roleIndex" class="full-width">
       <div class="role-row">
         <span class="fixed-width">{{getRoleName(roleIndex)}}</span>
