@@ -1,1 +1,6 @@
-<p>forum-detail works!</p>
+<p>{{forumName$ | async}}</p>
+<mat-card>TODO insert new forum entry</mat-card>
+
+<ng-container *ngFor="let entry of forumEntries$ | async">
+    <div>entry 123</div>
+</ng-container>

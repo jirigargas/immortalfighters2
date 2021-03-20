@@ -13,7 +13,7 @@
 
             <mat-selection-list #forums [multiple]="false" dense>
                 <mat-list-option *ngFor="let forum of forumsCategory.forums" [value]="forum"
-                    [routerLink]="[forum.forumId]">
+                    [routerLink]="[forum.forumId]" [queryParams]="{name: forum.name}">
                     {{forum.name}}
                 </mat-list-option>
             </mat-selection-list>
