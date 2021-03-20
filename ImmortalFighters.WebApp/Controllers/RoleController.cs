@@ -11,10 +11,10 @@ namespace ImmortalFighters.WebApp.Controllers
     [Route("[controller]")]
     public class RoleController : ControllerBase
     {
-        private readonly RoleRepository _roleRepository;
+        private readonly IRoleRepository _roleRepository;
         private readonly IMapper _mapper;
 
-        public RoleController(RoleRepository roleRepository, IMapper mapper)
+        public RoleController(IRoleRepository roleRepository, IMapper mapper)
         {
             _roleRepository = roleRepository;
             _mapper = mapper;

@@ -22,8 +22,16 @@
     </mat-error>
   </mat-form-field>
 
+  <div formArrayName="roles">
+    <div *ngFor="let role of getRoleControls(); index as roleIndex" [formGroupName]="roleIndex">
+      <input type="text" formControlName="name" />
+    </div>
+  </div>
+
+
   <div class="form-actions">
     <button mat-button mat-dialog-close>Zpět</button>
     <button type="submit" [disabled]="!form.valid" mat-raised-button color="accent">Vytvořit fórum</button>
   </div>
+
 </form>

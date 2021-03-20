@@ -18,18 +18,17 @@ import { CreateForumComponent } from '../create-forum/create-forum.component';
 export class ForumListComponent implements OnInit {
 
   forumsGroupedByCategory$!: Observable<ForumsGroupedByCategory[]>;
-  isForumAdministrator$: Observable<boolean>;
+  isForumAdministrator$!: Observable<boolean>;
 
   constructor(private forumApi: ForumApiService,
     private snackbarService: SnackbarService,
     private store: Store<AppState>,
-    public dialog: MatDialog) { 
-      this.isForumAdministrator$ = this.store.select(getIsModerator);
-    }
+    public dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
     this.forumsGroupedByCategory$ = this.forumApi.getAllGroupedByCategory();
-    
+    this.isForumAdministrator$ = this.store.select(getIsModerator);
   }
 
   onClickCreateForum() {
