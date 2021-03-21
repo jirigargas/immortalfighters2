@@ -12,7 +12,6 @@ export class ForumEntryApiService {
         @Inject('BASE_URL') private baseUrl: string) { }
 
     get(forumId: number, page: number, pageSize: number): Observable<ForumEntry[]> {
-        debugger;
         let params = new HttpParams()
             .append('forumId', forumId.toString())
             .append('page', page.toString())

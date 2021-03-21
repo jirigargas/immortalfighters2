@@ -1,6 +1,11 @@
 <p>{{forumName$ | async}}</p>
-<mat-card>TODO insert new forum entry</mat-card>
+
+<mat-card>
+    <quill-editor [(ngModel)]="newEntry"></quill-editor>
+</mat-card>
 
 <ng-container *ngFor="let entry of forumEntries$ | async">
-    <div>entry 123</div>
+    <div>
+        <pre>{{newEntry}}</pre>
+    </div>
 </ng-container>

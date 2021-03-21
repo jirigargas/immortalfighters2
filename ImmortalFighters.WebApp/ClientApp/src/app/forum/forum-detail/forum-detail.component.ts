@@ -12,6 +12,7 @@ import { ForumEntryApiService } from '../../core/services/forum-entry-api.servic
 })
 export class ForumDetailComponent implements OnInit {
 
+  newEntry: string = "";
   forumName$: Observable<string>;
   forumEntries$: Observable<ForumEntry[]>;
 
