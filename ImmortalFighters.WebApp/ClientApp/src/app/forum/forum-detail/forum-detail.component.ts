@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { Observable, PartialObserver } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { ForumEntry } from '../../core/models/forum-models';
 import { ForumEntryApiService } from '../../core/services/forum-entry-api.service';
 
@@ -12,9 +12,14 @@ import { ForumEntryApiService } from '../../core/services/forum-entry-api.servic
 })
 export class ForumDetailComponent implements OnInit {
 
+  forumId: number = -1;
   newEntry: string = "";
   forumName$: Observable<string>;
   forumEntries$: Observable<ForumEntry[]>;
+
+  createNewEntryObserver: PartialObserver<any> = {
+    next: x => { console.log(x) } // todo add
+  };
 
   constructor(private route: ActivatedRoute, private forumEntryApi: ForumEntryApiService) {
 
@@ -22,12 +27,22 @@ export class ForumDetailComponent implements OnInit {
     this.forumEntries$ = this.route.paramMap
       .pipe(
         map(params => parseInt(params.get('id') ?? "")),
+        tap(forumId => this.forumId = forumId),
         switchMap(forumId => this.forumEntryApi.get(forumId, 0, 10))
       );
   }
 
   ngOnInit(): void {
 
+  }
+
+  createNewEntry() {
+    debugger;
+    if (this.newEntry !== "") {
+      this.forumEntryApi
+        .post({ forumId: this.forumId, text: this.newEntry })
+        .subscribe(this.createNewEntryObserver);
+    }
   }
 
 }

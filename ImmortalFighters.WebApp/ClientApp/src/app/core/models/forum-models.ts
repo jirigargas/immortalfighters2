@@ -13,3 +13,8 @@ export class ForumEntry {
     forumEntryId: number = -1;
     text: string = "";
 }
+
+export class createNewForumEntryRequest {
+    forumId: number = -1;
+    text: string = "";
+}

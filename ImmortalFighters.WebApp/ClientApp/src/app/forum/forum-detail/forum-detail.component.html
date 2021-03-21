@@ -2,7 +2,7 @@
 
 <mat-card class="new-entry-card">
         <quill-editor id="newForumEntryEditor" [(ngModel)]="newEntry"></quill-editor>
-    <button mat-raised-button color="accent">Odeslat</button>
+    <button mat-raised-button color="accent" (click)="createNewEntry()">Odeslat</button>
 </mat-card>
 
 <ng-container *ngFor="let entry of forumEntries$ | async">
