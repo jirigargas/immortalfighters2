@@ -32,7 +32,7 @@ namespace ImmortalFighters.WebApp.Middlewares
                 var userId = int.Parse(claims.First(x => x.Type == ClaimTypes.Id).Value);
 
                 // attach user to context on successful jwt validation
-                context.Items["User"] = userService.GetBy(x => x.UserId == userId);
+                context.Items[Consts.HttpContextUser] = userService.GetBy(x => x.UserId == userId);
             }
             catch
             {

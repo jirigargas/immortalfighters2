@@ -8,5 +8,7 @@
         public const string RoleModerator = "Moderátor";
         public const string RoleEconom = "Ekonom";
         public const string RoleVip = "RoleVip";
+
+        public const string HttpContextUser = "User";
     }
 }

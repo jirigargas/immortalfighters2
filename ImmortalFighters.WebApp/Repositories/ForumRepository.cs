@@ -32,7 +32,7 @@ namespace ImmortalFighters.WebApp.Services
                 Name = request.Name,
                 Category = request.Category,
                 Created = DateTime.UtcNow,
-                CreatedBy = (User)_httpContextAccessor.HttpContext.Items["User"],
+                CreatedBy = (User)_httpContextAccessor.HttpContext.Items[Consts.HttpContextUser],
                 Status = ForumStatus.Active
             };
             _context.Forums.Add(newForum);

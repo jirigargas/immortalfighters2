@@ -46,6 +46,7 @@ namespace ImmortalFighters.WebApp
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IForumRepository, ForumRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IForumEntryRepository, ForumEntryRepository>();
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IAuthenticationProvider, AuthenticationProvider>();

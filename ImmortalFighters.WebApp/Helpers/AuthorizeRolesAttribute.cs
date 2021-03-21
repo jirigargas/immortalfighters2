@@ -22,7 +22,7 @@ namespace ImmortalFighters.WebApp.Helpers
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var user = context.HttpContext.Items["User"] as User;
+            var user = context.HttpContext.Items[Consts.HttpContextUser] as User;
 
             if (user == null || !HasCorrectRole(user))
             {
