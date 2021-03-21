@@ -1,11 +1,12 @@
 <p>{{forumName$ | async}}</p>
 
-<mat-card>
-    <quill-editor [(ngModel)]="newEntry"></quill-editor>
+<mat-card class="new-entry-card">
+        <quill-editor id="newForumEntryEditor" [(ngModel)]="newEntry"></quill-editor>
+    <button mat-raised-button color="accent">Odeslat</button>
 </mat-card>
 
 <ng-container *ngFor="let entry of forumEntries$ | async">
     <div>
-        <pre>{{newEntry}}</pre>
+        {{entry.text}}
     </div>
 </ng-container>

@@ -10,5 +10,6 @@ export class ForumsGroupedByCategory {
 }
 
 export class ForumEntry {
-    
+    forumEntryId: number = -1;
+    text: string = "";
 }

@@ -1,0 +1,15 @@
+.new-entry-card {
+    display        : flex;
+    flex-direction : column;
+    justify-content: space-between;
+    align-items    : flex-end;
+
+    #newForumEntryEditor {
+        width: -webkit-fill-available;
+    }
+
+    button {
+        margin-top: 8px;
+        max-width : fit-content;
+    }
+}
