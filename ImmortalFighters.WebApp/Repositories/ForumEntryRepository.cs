@@ -1,10 +1,10 @@
 ﻿using ImmortalFighters.WebApp.ApiModels;
 using ImmortalFighters.WebApp.Helpers;
 using ImmortalFighters.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ImmortalFighters.WebApp.Services
@@ -18,11 +18,13 @@ namespace ImmortalFighters.WebApp.Services
     {
         private readonly IfDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IAuthorizationService _authorizationService;
 
-        public ForumEntryRepository(IfDbContext context, IHttpContextAccessor httpContextAccessor)
+        public ForumEntryRepository(IfDbContext context, IHttpContextAccessor httpContextAccessor, IAuthorizationService authorizationService)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+            _authorizationService = authorizationService;
         }
 
         public async Task<ForumEntry> Create(CreateNewForumEntryRequest request)
@@ -30,7 +32,10 @@ namespace ImmortalFighters.WebApp.Services
             var forum = await _context.Forums.Include(x => x.AccessRights).SingleAsync(x => x.ForumId == request.ForumId);
             var user = _httpContextAccessor.HttpContext.Items[Consts.HttpContextUser] as User;
 
-            if (!CanUserWriteToForum(user, forum)) throw new ApiResponseException { StatusCode = 403 };
+            // TODO Move authorization up? to service?
+            var authorization = await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, forum, Operations.Create);
+
+            if (!authorization.Succeeded) throw new ApiResponseException { StatusCode = 403 };
 
             var newEntry = new ForumEntry
             {
@@ -46,22 +51,6 @@ namespace ImmortalFighters.WebApp.Services
             return newEntry;
         }
 
-        private bool CanUserWriteToForum(User user, Forum forum)
-        {
-            var userRoleIds = user.UserRoles.Select(x => x.RoleId);
-            var userIsAdmin = user.UserRoles.Any(x => x.Role.Name == Consts.RoleAdmin);
-            var canWriteToForumByRoleAccessRight = forum.AccessRights
-                .OfType<ForumRoleAccessRight>()
-                .Where(x => x.CanWrite)
-                .Select(x => x.RoleId)
-                .Intersect(userRoleIds)
-                .Any();
 
-            var canWriteToForumByUserAccessRight = forum.AccessRights
-                .OfType<ForumUserAccessRight>()
-                .Any(x => x.UserId == user.UserId && x.CanWrite);
-
-            return userIsAdmin || canWriteToForumByRoleAccessRight || canWriteToForumByUserAccessRight;
-        }
     }
 }

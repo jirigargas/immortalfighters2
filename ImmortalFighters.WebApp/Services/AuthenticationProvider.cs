@@ -13,6 +13,8 @@ namespace ImmortalFighters.WebApp.Services
     public class ClaimTypes
     {
         public static string Id = "id";
+        public static string RoleId = "roleId";
+        public static string RoleName = "roleName";
     }
 
     public interface IAuthenticationProvider
@@ -34,12 +36,18 @@ namespace ImmortalFighters.WebApp.Services
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_securityOptions.Secret);
+
+            var claimsIdentity = new ClaimsIdentity();
+            claimsIdentity.AddClaim(new Claim(ClaimTypes.Id, user.UserId.ToString()));
+            foreach(var userRole in user.UserRoles)
+            {
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.RoleId, userRole.RoleId.ToString()));
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.RoleName, userRole.Role.Name));
+            }
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] 
-                { 
-                    new Claim(ClaimTypes.Id, user.UserId.ToString())
-                }),
+                Subject = claimsIdentity,
                 Expires = DateTime.UtcNow.Add(_securityOptions.TokenExpirationTimeout),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };

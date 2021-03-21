@@ -5,6 +5,7 @@ using ImmortalFighters.WebApp.Repositories;
 using ImmortalFighters.WebApp.Services;
 using ImmortalFighters.WebApp.Settings;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -50,6 +51,10 @@ namespace ImmortalFighters.WebApp
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IAuthenticationProvider, AuthenticationProvider>();
+
+            // imperative authorization
+            services.AddAuthorization();
+            services.AddTransient<IAuthorizationHandler, ForumEntryAuthorizationCrudHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
