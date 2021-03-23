@@ -51,6 +51,7 @@ namespace ImmortalFighters.WebApp
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IAuthenticationProvider, AuthenticationProvider>();
+            services.AddScoped<IForumEntryService, ForumEntryService>();
 
             // imperative authorization
             services.AddAuthorization();

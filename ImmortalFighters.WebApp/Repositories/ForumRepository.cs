@@ -1,9 +1,11 @@
 ﻿using ImmortalFighters.WebApp.ApiModels;
 using ImmortalFighters.WebApp.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ImmortalFighters.WebApp.Services
 {
@@ -12,6 +14,7 @@ namespace ImmortalFighters.WebApp.Services
         IEnumerable<Forum> GetAll();
         IEnumerable<string> GetAllCategories();
         Forum Create(CreateNewForumRequest request);
+        Task<Forum> GetByIdWithAccessRights(int forumId);
     }
 
     public class ForumRepository : IForumRepository
@@ -70,6 +73,13 @@ namespace ImmortalFighters.WebApp.Services
         public IEnumerable<string> GetAllCategories()
         {
             return _context.Forums.Select(x => x.Category).Distinct();
+        }
+
+        public Task<Forum> GetByIdWithAccessRights(int forumId)
+        {
+            return _context.Forums
+                .Include(x => x.AccessRights)
+                .SingleAsync(x => x.ForumId == forumId);
         }
     }
 }

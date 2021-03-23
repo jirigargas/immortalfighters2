@@ -1,12 +1,16 @@
 <p>{{forumName$ | async}}</p>
 
 <mat-card class="new-entry-card">
-        <quill-editor id="newForumEntryEditor" [(ngModel)]="newEntry"></quill-editor>
+    <quill-editor (onContentChanged)="onContentChanged($event)" #forumEntryEditor id="newForumEntryEditor">
+    </quill-editor>
     <button mat-raised-button color="accent" (click)="createNewEntry()">Odeslat</button>
 </mat-card>
 
-<ng-container *ngFor="let entry of forumEntries$ | async">
-    <div>
-        {{entry.text}}
+TOTAL:{{(forumEntries$ | async)?.totalCount}}
+
+
+<ng-container *ngFor="let entry of (forumEntries$ | async)?.forumEntries">
+    <div class="forumEntry">
+        <quill-view [content]="entry.text" format="json" theme="snow"></quill-view>
     </div>
 </ng-container>

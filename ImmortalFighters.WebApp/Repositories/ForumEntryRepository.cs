@@ -1,41 +1,35 @@
-﻿using ImmortalFighters.WebApp.ApiModels;
-using ImmortalFighters.WebApp.Helpers;
-using ImmortalFighters.WebApp.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+﻿using ImmortalFighters.WebApp.Models;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ImmortalFighters.WebApp.Services
 {
     public interface IForumEntryRepository
     {
-        Task<ForumEntry> Create(CreateNewForumEntryRequest request);
+        Task<ForumEntry> Create(int forumId, int userId, string text);
+        IQueryable<ForumEntry> Get(int forumId, int page, int pageSize);
+        int Count(int forumId);
     }
 
     public class ForumEntryRepository : IForumEntryRepository
     {
         private readonly IfDbContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IAuthorizationService _authorizationService;
 
-        public ForumEntryRepository(IfDbContext context, IHttpContextAccessor httpContextAccessor, IAuthorizationService authorizationService)
+        public ForumEntryRepository(IfDbContext context)
         {
             _context = context;
-            _httpContextAccessor = httpContextAccessor;
-            _authorizationService = authorizationService;
         }
 
-        public async Task<ForumEntry> Create(CreateNewForumEntryRequest request)
+        public int Count(int forumId)
         {
-            var forum = await _context.Forums.Include(x => x.AccessRights).SingleAsync(x => x.ForumId == request.ForumId);
-            var user = _httpContextAccessor.HttpContext.Items[Consts.HttpContextUser] as User;
+            return _context.ForumEntries.Count(x => x.ForumId == forumId);
+        }
 
-            // TODO Move authorization up? to service?
-            var authorization = await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, forum, Operations.Create);
-
-            if (!authorization.Succeeded) throw new ApiResponseException { StatusCode = 403 };
+        public async Task<ForumEntry> Create(int forumId, int userId, string text)
+        {
+            var forum = _context.Forums.Find(forumId);
+            var user = _context.Users.Find(userId);
 
             var newEntry = new ForumEntry
             {
@@ -43,7 +37,7 @@ namespace ImmortalFighters.WebApp.Services
                 User = user,
                 Created = DateTime.UtcNow,
                 Status = ForumEntryStatus.Active,
-                Text = request.Text
+                Text = text
             };
 
             _context.ForumEntries.Add(newEntry);
@@ -51,6 +45,13 @@ namespace ImmortalFighters.WebApp.Services
             return newEntry;
         }
 
-
+        public IQueryable<ForumEntry> Get(int forumId, int page, int pageSize)
+        {
+            return _context.ForumEntries
+                .Where(x => x.ForumId == forumId)
+                .OrderByDescending(x => x.Created)
+                .Skip(pageSize * page)
+                .Take(pageSize);
+        }
     }
 }

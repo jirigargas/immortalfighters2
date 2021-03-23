@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, PartialObserver } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
-import { ForumEntry } from '../../core/models/forum-models';
+import { map, share, switchMap, tap } from 'rxjs/operators';
+import { ForumEntries } from '../../core/models/forum-models';
 import { ForumEntryApiService } from '../../core/services/forum-entry-api.service';
 
 @Component({
@@ -13,9 +13,9 @@ import { ForumEntryApiService } from '../../core/services/forum-entry-api.servic
 export class ForumDetailComponent implements OnInit {
 
   forumId: number = -1;
-  newEntry: string = "";
   forumName$: Observable<string>;
-  forumEntries$: Observable<ForumEntry[]>;
+  forumEntries$: Observable<ForumEntries>;
+  newForumEntryContent: any;
 
   createNewEntryObserver: PartialObserver<any> = {
     next: x => { console.log(x) } // todo add
@@ -28,7 +28,8 @@ export class ForumDetailComponent implements OnInit {
       .pipe(
         map(params => parseInt(params.get('id') ?? "")),
         tap(forumId => this.forumId = forumId),
-        switchMap(forumId => this.forumEntryApi.get(forumId, 0, 10))
+        switchMap(forumId => this.forumEntryApi.get(forumId, 0, 10)),
+        share()
       );
   }
 
@@ -36,11 +37,15 @@ export class ForumDetailComponent implements OnInit {
 
   }
 
+  onContentChanged(event: any) {
+    this.newForumEntryContent = event.content;
+  }
+
   createNewEntry() {
-    debugger;
-    if (this.newEntry !== "") {
+    if (this.newForumEntryContent) {
+      var text = JSON.stringify(this.newForumEntryContent);
       this.forumEntryApi
-        .post({ forumId: this.forumId, text: this.newEntry })
+        .post({ forumId: this.forumId, text: text })
         .subscribe(this.createNewEntryObserver);
     }
   }
