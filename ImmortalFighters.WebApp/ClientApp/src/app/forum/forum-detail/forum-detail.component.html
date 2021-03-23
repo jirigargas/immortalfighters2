@@ -1,7 +1,8 @@
 <p>{{forumName$ | async}}</p>
 
 <mat-card class="new-entry-card">
-    <quill-editor (onContentChanged)="onContentChanged($event)" #forumEntryEditor id="newForumEntryEditor">
+    <quill-editor (onContentChanged)="onContentChanged($event)" #forumEntryEditor id="newForumEntryEditor"
+        [(ngModel)]="newForumEntryModel">
     </quill-editor>
     <button mat-raised-button color="accent" (click)="createNewEntry()">Odeslat</button>
 </mat-card>
@@ -10,7 +11,17 @@ TOTAL:{{(forumEntries$ | async)?.totalCount}}
 
 
 <ng-container *ngFor="let entry of (forumEntries$ | async)?.forumEntries">
-    <div class="forumEntry">
-        <quill-view [content]="entry.text" format="json" theme="snow"></quill-view>
-    </div>
+    <mat-card class="forumEntry">
+        <mat-card-header>
+            <mat-card-title>{{entry.username}}</mat-card-title>
+            <mat-card-subtitle>{{entry.created + 'Z' | date:'medium'}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <quill-view [content]="entry.text" format="json" theme="snow"></quill-view>
+        </mat-card-content>
+        <!-- <mat-card-actions>
+                <button mat-button>LIKE</button>
+              <button mat-button>SHARE</button>
+            </mat-card-actions> -->
+    </mat-card>
 </ng-container>

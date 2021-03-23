@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { QuillEditorComponent } from 'ngx-quill';
 import { Observable, PartialObserver } from 'rxjs';
 import { map, share, switchMap, tap } from 'rxjs/operators';
 import { ForumEntries } from '../../core/models/forum-models';
@@ -16,15 +17,23 @@ export class ForumDetailComponent implements OnInit {
   forumName$: Observable<string>;
   forumEntries$: Observable<ForumEntries>;
   newForumEntryContent: any;
+  newForumEntryModel:any;
 
   createNewEntryObserver: PartialObserver<any> = {
-    next: x => { console.log(x) } // todo add
+    next: x => { 
+      this.forumEntries$ = this.getForumEntries();
+      this.newForumEntryModel = "";
+    },
   };
 
   constructor(private route: ActivatedRoute, private forumEntryApi: ForumEntryApiService) {
 
     this.forumName$ = this.route.queryParamMap.pipe(map(x => x.get('name') ?? ""));
-    this.forumEntries$ = this.route.paramMap
+    this.forumEntries$ = this.getForumEntries();
+  }
+
+  getForumEntries(): Observable<ForumEntries> {
+    return this.route.paramMap
       .pipe(
         map(params => parseInt(params.get('id') ?? "")),
         tap(forumId => this.forumId = forumId),
@@ -33,7 +42,7 @@ export class ForumDetailComponent implements OnInit {
       );
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
 
   }
 

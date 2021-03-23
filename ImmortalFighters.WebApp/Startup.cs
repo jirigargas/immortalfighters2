@@ -55,7 +55,8 @@ namespace ImmortalFighters.WebApp
 
             // imperative authorization
             services.AddAuthorization();
-            services.AddTransient<IAuthorizationHandler, ForumEntryAuthorizationCrudHandler>();
+            services.AddTransient<IAuthorizationHandler, ForumCrudAuthorizationCrudHandler>();
+            services.AddTransient<IAuthorizationHandler, ForumEntryCrudAuthorizationHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -7,7 +7,7 @@ namespace ImmortalFighters.WebApp.AutoMapper
         public ForumEntryProfiles()
         {
             CreateMap<Models.ForumEntry, ApiModels.ForumEntryResponse>()
-                .ForMember(x => x.UserName, o => o.MapFrom(x => x.User.Username));
+                .ForMember(x => x.Username, o => o.MapFrom(x => x.User.Username));
         }
     }
 }

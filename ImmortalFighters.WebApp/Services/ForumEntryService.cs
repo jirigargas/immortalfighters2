@@ -39,7 +39,7 @@ namespace ImmortalFighters.WebApp.Services
         public async Task<ForumEntryResponse> Create(CreateNewForumEntryRequest request)
         {
             var forum = await _forumRepository.GetByIdWithAccessRights(request.ForumId);
-            var authorization = await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, forum, Operations.Create);
+            var authorization = await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, new ForumEntry { Forum = forum }, Operations.Create);
 
             if (!authorization.Succeeded) throw new ApiResponseException { StatusCode = 403 };
 
