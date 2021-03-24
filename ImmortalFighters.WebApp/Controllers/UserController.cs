@@ -7,20 +7,22 @@ namespace ImmortalFighters.WebApp.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly IUsersService _usersService;
+        private readonly IUserRepository _usersService;
+        private readonly IAuthenticationService _authService;
 
-        public UsersController(IUsersService usersService)
+        public UserController(IUserRepository usersService, IAuthenticationService authService)
         {
             _usersService = usersService;
+            _authService = authService;
         }
 
         [HttpPost]
         [Route("[action]")]
         public IActionResult Login(LoginRequest args)
         {
-            var response = _usersService.Authenticate(args);
+            var response = _authService.Authenticate(args);
             return Ok(response);
         }
 
@@ -28,8 +30,8 @@ namespace ImmortalFighters.WebApp.Controllers
         [Route("[action]")]
         public async Task<IActionResult> Register(RegisterRequest args)
         {
-            var response = await _usersService.Register(args);
-            return Ok(response);
+            await _usersService.Register(args);
+            return Ok();
         }
     }
 }

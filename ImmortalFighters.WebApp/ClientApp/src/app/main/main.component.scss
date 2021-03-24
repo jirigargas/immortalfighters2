@@ -1,0 +1,15 @@
+.spacer {
+    flex: 1 1 auto;
+}
+
+.container {
+    position: absolute;
+    right   : 0;
+    left    : 0;
+    bottom  : 0;
+    top     : 64px;
+}
+
+.main-content {
+    padding: 8px;
+}

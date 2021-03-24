@@ -1,4 +1,5 @@
-﻿using ImmortalFighters.WebApp.Models;
+﻿using System;
+using ImmortalFighters.WebApp.Models;
 using ImmortalFighters.WebApp.Settings;
 using MailKit.Net.Smtp;
 using MediatR;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Options;
 using MimeKit;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace ImmortalFighters.WebApp.MediatR
 {
@@ -16,24 +18,33 @@ namespace ImmortalFighters.WebApp.MediatR
 
     public class SendEmailHandler : INotificationHandler<SendEmail>
     {
-        private readonly SmtpOptions options;
+        private readonly ILogger<SendEmailHandler> _logger;
+        private readonly SmtpOptions _options;
 
-        public SendEmailHandler(IOptions<SmtpOptions> smtpOptions)
+        public SendEmailHandler(IOptions<SmtpOptions> options, ILogger<SendEmailHandler> logger)
         {
-            options = smtpOptions.Value;
+            _logger = logger;
+            _options = options.Value;
         }
 
         public async Task Handle(SendEmail notification, CancellationToken cancellationToken)
         {
-            using var client = new SmtpClient();
+            try
+            {
+                using var client = new SmtpClient();
 
-            var message = notification.Message;
-            message.From.Add(new MailboxAddress(options.SenderName, options.SenderAddress));
+                var message = notification.Message;
+                message.From.Add(new MailboxAddress(_options.SenderName, _options.SenderAddress));
 
-            await client.ConnectAsync(options.Server, options.Port, true, cancellationToken);
-            await client.AuthenticateAsync(options.Username, options.Password, cancellationToken);
-            await client.SendAsync(notification.Message);
-            await client.DisconnectAsync(true);
+                await client.ConnectAsync(_options.Server, _options.Port, true, cancellationToken);
+                await client.AuthenticateAsync(_options.Username, _options.Password, cancellationToken);
+                await client.SendAsync(notification.Message, cancellationToken);
+                await client.DisconnectAsync(true, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Send email notification failed");
+            }
         }
     }
 
@@ -55,11 +66,9 @@ namespace ImmortalFighters.WebApp.MediatR
 
             message.Subject = "Vítej do světa Immortal Fighters!";
 
-            // TODO Add headers so Google do not treat it as spam
-
             BodyBuilder bodyBuilder = new BodyBuilder();
-            bodyBuilder.HtmlBody = "<h1>Hello World!</h1>";
-            bodyBuilder.TextBody = "Hello World!";
+            bodyBuilder.HtmlBody = "Pro dokončení registrace prosím klikni na tento <a href=\"\">odkaz</a>"; // TODO JG add correct url
+            bodyBuilder.TextBody = "Pro dokončení registrace otevři tento odkaz: ";
 
             message.Body = bodyBuilder.ToMessageBody();
 

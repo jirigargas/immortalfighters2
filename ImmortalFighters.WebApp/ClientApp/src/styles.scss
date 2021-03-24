@@ -17,7 +17,10 @@ $ImmortalFighters-accent: mat-palette($mat-blue, 300);
 
 // The warn palette is optional (defaults to red).
 $ImmortalFighters-warn: mat-palette($mat-red);
+$ImmortalFighters-success: mat-palette($mat-green);
 $warn-color: mat-color($ImmortalFighters-warn);
+$success-color: mat-color($ImmortalFighters-success);
+$primary-color: mat-color($ImmortalFighters-primary);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
@@ -34,15 +37,43 @@ $ImmortalFighters-theme: mat-dark-theme((
 // that you are using.
 @include angular-material-theme($ImmortalFighters-theme);
 
+@import "~quill/dist/quill.core.css";
+@import "~quill/dist/quill.snow.css";
+
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-.red-snackbar {
+.failed-snackbar {
   background: $warn-color;
 }
 
-.red-snackbar span {
+.failed-snackbar span {
   color: white;
+}
+
+.succeeded-snackbar {
+  background: $success-color;
+}
+
+.succeeded-snackbar span {
+  color: white;
+}
+
+.ql-toolbar {
+  background: $primary-color;
+}
+
+.ql-editor {
+  background: #424242;
+}
+
+.ql-container {
+  max-height: 33vh;
+  overflow-y: auto;
+}
+
+.ngx-quill-view {
+  height: auto;
 }

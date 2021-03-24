@@ -11,6 +11,10 @@ namespace ImmortalFighters.WebApp.Models
         public DbSet<Quest> Quests { get; set; }
         public DbSet<QuestCharacter> QuestCharacters { get; set; }
         public DbSet<QuestEntry> QuestEntries { get; set; }
+        public DbSet<Forum> Forums { get; set; }
+        public DbSet<ForumRoleAccessRight> ForumRoleAccessRights { get; set; }
+        public DbSet<ForumUserAccessRight> ForumUserAccessRights { get; set; }
+        public DbSet<ForumEntry> ForumEntries { get; set; }
 
         public IfDbContext(DbContextOptions<IfDbContext> options) : base(options)
         {
@@ -97,6 +101,54 @@ namespace ImmortalFighters.WebApp.Models
                 .IsRequired()
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Forum>()
+                .Property(x => x.Name).IsRequired();
+            modelBuilder.Entity<Forum>()
+                .Property(x => x.Category).IsRequired();
+            modelBuilder.Entity<Forum>()
+                .HasOne(x => x.CreatedBy)
+                .WithMany(x => x.CreatedForums)
+                .HasForeignKey(x => x.CreatedById)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Forum>()
+                .Property(x => x.Created)
+                .IsRequired();
+            modelBuilder.Entity<Forum>()
+                .HasMany(x => x.AccessRights)
+                .WithOne(x => x.Forum)
+                .HasForeignKey(x => x.ForumId);
+
+            modelBuilder.Entity<AccessRight>().ToTable("AccessRights");
+
+            modelBuilder.Entity<ForumRoleAccessRight>()
+                .HasOne(x => x.Role)
+                .WithMany(x => x.ForumRoleAccessRights)
+                .HasForeignKey(x => x.RoleId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.ClientCascade);
+
+            modelBuilder.Entity<ForumUserAccessRight>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.ForumUserAccessRights)
+                .HasForeignKey(x => x.UserId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.ClientCascade);
+
+            modelBuilder.Entity<ForumEntry>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.ForumEntries)
+                .HasForeignKey(x => x.UserId);
+
+            modelBuilder.Entity<ForumEntry>().Property(x => x.Created).IsRequired();
+            modelBuilder.Entity<ForumEntry>().Property(x => x.Changed).IsRequired(false);
+
+            modelBuilder.Entity<ForumEntry>()
+                .HasOne(x => x.Forum)
+                .WithMany(x => x.ForumEntries)
+                .HasForeignKey(x => x.ForumId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }

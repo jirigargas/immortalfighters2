@@ -1,9 +1,12 @@
 using ImmortalFighters.WebApp.Helpers;
+using ImmortalFighters.WebApp.Helpers.AuthorizationHandlers;
 using ImmortalFighters.WebApp.Middlewares;
 using ImmortalFighters.WebApp.Models;
+using ImmortalFighters.WebApp.Repositories;
 using ImmortalFighters.WebApp.Services;
 using ImmortalFighters.WebApp.Settings;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +28,8 @@ namespace ImmortalFighters.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews(options => options.Filters.Add(new ApiResponseExceptionFilter()));
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -40,8 +45,19 @@ namespace ImmortalFighters.WebApp
             services.Configure<SecurityOptions>(options => Configuration.GetSection("Security").Bind(options));
             services.Configure<SmtpOptions>(options => Configuration.GetSection("Smtp").Bind(options));
 
-            services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IForumRepository, ForumRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IForumEntryRepository, ForumEntryRepository>();
+
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IAuthenticationProvider, AuthenticationProvider>();
+            services.AddScoped<IForumEntryService, ForumEntryService>();
+
+            // imperative authorization
+            services.AddAuthorization();
+            services.AddTransient<IAuthorizationHandler, ForumCrudAuthorizationCrudHandler>();
+            services.AddTransient<IAuthorizationHandler, ForumEntryCrudAuthorizationHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

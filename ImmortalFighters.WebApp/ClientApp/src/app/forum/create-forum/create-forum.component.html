@@ -1,0 +1,52 @@
+<form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+  <mat-form-field class="full-width">
+    <mat-label>Název</mat-label>
+    <input type="text" matInput formControlName="name" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="form.controls['name'].hasError('required')">
+      Název fóra je vyžadovaný
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Kategorie</mat-label>
+    <input type="text" placeholder="Vyber nebo vytvoř kategorii" aria-label="Kategorie" matInput
+      formControlName="category" [matAutocomplete]="auto" [errorStateMatcher]="matcher">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of categories$ | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-error *ngIf="form.controls['category'].hasError('required')">
+      Kategorie fóra je vyžadovaná
+    </mat-error>
+  </mat-form-field>
+
+  <div formArrayName="accessRights">
+    <div *ngFor="let role of getRoleControls(); index as roleIndex" [formGroupName]="roleIndex" class="full-width">
+      <div class="role-row">
+        <span class="fixed-width">{{getRoleName(roleIndex)}}</span>
+
+        <input type="hidden" formControlName="roleId" />
+
+        <div class="fixed-width role-row">
+          <mat-label class="margin-right">Čtení</mat-label>
+          <mat-checkbox formControlName="canRead"></mat-checkbox>
+        </div>
+
+        <div class="role-row">
+          <mat-label class="margin-right">Zápis</mat-label>
+          <mat-checkbox formControlName="canWrite"></mat-checkbox>
+        </div>
+      </div>
+      <mat-divider class="margin-bottom margin-top"></mat-divider>
+    </div>
+  </div>
+
+
+  <div class="form-actions">
+    <button mat-button mat-dialog-close>Zpět</button>
+    <button type="submit" [disabled]="!form.valid" mat-raised-button color="accent">Vytvořit fórum</button>
+  </div>
+
+</form>

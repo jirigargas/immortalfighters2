@@ -1,0 +1,24 @@
+<div class="forum-container">
+    <div class="forum-options" *ngIf="isForumAdministrator$ | async">
+        <button mat-raised-button color="accent" (click)="onClickCreateForum()">Přidat nové fórum</button>
+    </div>
+    <mat-accordion multi>
+        <mat-expansion-panel *ngFor="let forumsCategory of forumsGroupedByCategory$ | async" hideToggle expanded>
+
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{forumsCategory.category}}
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <mat-selection-list #forums [multiple]="false" dense>
+                <mat-list-option *ngFor="let forum of forumsCategory.forums" [value]="forum"
+                    [routerLink]="[forum.forumId]" [queryParams]="{name: forum.name}">
+                    {{forum.name}}
+                </mat-list-option>
+            </mat-selection-list>
+
+        </mat-expansion-panel>
+    </mat-accordion>
+
+</div>

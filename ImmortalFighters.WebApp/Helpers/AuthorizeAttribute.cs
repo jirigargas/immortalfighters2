@@ -10,7 +10,7 @@ namespace ImmortalFighters.WebApp.Helpers
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var user = context.HttpContext.Items["User"];
+            var user = context.HttpContext.Items[Consts.HttpContextUser];
             if (user == null)
             {
                 // not logged in

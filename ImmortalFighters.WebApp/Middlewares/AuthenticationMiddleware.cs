@@ -1,6 +1,7 @@
 ﻿using ImmortalFighters.WebApp.Services;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ImmortalFighters.WebApp.Middlewares
@@ -14,7 +15,7 @@ namespace ImmortalFighters.WebApp.Middlewares
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context, IUsersService userService, IAuthenticationProvider authenticationProvider)
+        public async Task Invoke(HttpContext context, IUserRepository userService, IAuthenticationProvider authenticationProvider)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
@@ -24,15 +25,18 @@ namespace ImmortalFighters.WebApp.Middlewares
             await _next(context);
         }
 
-        private void AttachUserToContext(HttpContext context, IUsersService userService, IAuthenticationProvider authenticationProvider, string token)
+        private void AttachUserToContext(HttpContext context, IUserRepository userService, IAuthenticationProvider authenticationProvider, string token)
         {
             try
             {
                 var claims = authenticationProvider.ValidateToken(token);
-                var userId = int.Parse(claims.First(x => x.Type == ClaimTypes.Id).Value);
+                var userId = int.Parse(claims.First(x => x.Type == Services.ClaimTypes.Id).Value);
+
+                var tokenIdentity = new ClaimsIdentity(claims, "token");
+                context.User.AddIdentity(tokenIdentity);
 
                 // attach user to context on successful jwt validation
-                context.Items["User"] = userService.GetById(userId);
+                context.Items[Consts.HttpContextUser] = userService.GetBy(x => x.UserId == userId);
             }
             catch
             {

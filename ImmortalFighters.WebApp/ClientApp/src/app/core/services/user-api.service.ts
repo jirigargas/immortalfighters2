@@ -6,16 +6,16 @@ import { SignInRequest, SignInResponse, SignUpRequest } from '../models/authenti
 @Injectable({
   providedIn: 'root'
 })
-export class UsersApiService {
+export class UserApiService {
 
   constructor(private httpClient: HttpClient,
     @Inject('BASE_URL') private baseUrl: string) { }
 
   register(request: SignUpRequest): Observable<{}> {
-    return this.httpClient.post(this.baseUrl + "Users/Register", request);
+    return this.httpClient.post(this.baseUrl + "User/Register", request);
   }
 
-  login(request: SignInRequest) : Observable<SignInResponse> {
-    return this.httpClient.post<SignInResponse>(this.baseUrl + "Users/Login", request);
+  login(request: SignInRequest): Observable<SignInResponse> {
+    return this.httpClient.post<SignInResponse>(this.baseUrl + "User/Login", request);
   }
 }

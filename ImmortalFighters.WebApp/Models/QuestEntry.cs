@@ -7,6 +7,7 @@ namespace ImmortalFighters.WebApp.Models
         public int QuestEntryId { get; set; }
         public string Message { get; set; }
         public DateTime Created { get; set; }
+        public DateTime? Changed { get; set; }
 
         public int QuestId { get; set; }
         public Quest Quest { get; set; }

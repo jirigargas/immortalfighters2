@@ -1,0 +1,36 @@
+<p>{{forumName$ | async}}</p>
+
+<mat-card class="new-entry-card">
+    <quill-editor (onContentChanged)="onContentChanged($event)" #forumEntryEditor id="newForumEntryEditor"
+        [(ngModel)]="newForumEntryModel">
+    </quill-editor>
+    <button mat-raised-button color="accent" (click)="createNewEntry()">Odeslat</button>
+</mat-card>
+
+TOTAL:{{(forumEntries$ | async)?.totalCount}}
+
+
+<ng-container *ngFor="let entry of (forumEntries$ | async)?.forumEntries">
+    <mat-card class="forumEntry">
+        <mat-card-header>
+            <mat-card-title>{{entry.username}}</mat-card-title>
+            <mat-card-subtitle>
+                {{entry.created + 'Z' | date:'medium'}}
+                <span *ngIf="entry.changed">
+                    (Upraveno {{entry.changed + 'Z' | date:'medium'}})
+                </span>
+            </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <quill-view [content]="entry.text" format="json" theme="snow"></quill-view>
+        </mat-card-content>
+        <mat-card-actions *ngIf="(currentUser$ | async) === entry.username">
+            <button mat-button (click)="deleteEntry(entry)" *ngIf="(currentUser$ | async) === entry.username">
+                Smazat
+            </button>
+            <button mat-button color="accent" (click)="editEntry(entry)" *ngIf="(currentUser$ | async) === entry.username">
+                Upravit
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</ng-container>
