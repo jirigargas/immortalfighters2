@@ -23,10 +23,15 @@ export class ForumDetailComponent implements OnInit {
   newForumEntryContent: any;
   newForumEntryModel: any;
 
+  editingEntry: ForumEntry | undefined;
+
+  @ViewChild("forumEntryEditor") forumEntryEditor!: QuillEditorComponent;
+
   crudObserver: PartialObserver<any> = {
     next: x => {
       this.forumEntries$ = this.getForumEntries();
       this.newForumEntryModel = "";
+      this.editingEntry = undefined;
     },
   };
 
@@ -57,9 +62,16 @@ export class ForumDetailComponent implements OnInit {
   createNewEntry() {
     if (this.newForumEntryContent) {
       var text = JSON.stringify(this.newForumEntryContent);
-      this.forumEntryApi
-        .post({ forumId: this.forumId, text: text })
-        .subscribe(this.crudObserver);
+
+      if (this.editingEntry) {
+        this.forumEntryApi
+          .patch({ forumEntryId: this.editingEntry.forumEntryId, text })
+          .subscribe(this.crudObserver);
+      } else {
+        this.forumEntryApi
+          .post({ forumId: this.forumId, text: text })
+          .subscribe(this.crudObserver);
+      }
     }
   }
 
@@ -67,6 +79,13 @@ export class ForumDetailComponent implements OnInit {
     this.forumEntryApi
       .delete(entry.forumEntryId)
       .subscribe(this.crudObserver);
+  }
+
+  editEntry(entry: ForumEntry) {
+    this.editingEntry = entry;
+    var jsonText = JSON.parse(entry.text);
+    this.forumEntryEditor.quillEditor.setContents(jsonText);
+    (this.forumEntryEditor.elementRef.nativeElement as HTMLElement)?.scrollIntoView()
   }
 
 }

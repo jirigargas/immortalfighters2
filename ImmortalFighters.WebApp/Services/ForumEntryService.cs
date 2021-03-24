@@ -14,6 +14,7 @@ namespace ImmortalFighters.WebApp.Services
         Task<ForumEntriesResponse> GetForumEntries(int forumId, int page, int pageSize);
         Task<ForumEntryResponse> Create(CreateNewForumEntryRequest request);
         Task<ForumEntryResponse> Delete(int forumEntryId);
+        Task<ForumEntryResponse> Update(UpdateForumEntryRequest request);
     }
 
     public class ForumEntryService : IForumEntryService
@@ -80,6 +81,19 @@ namespace ImmortalFighters.WebApp.Services
                 TotalCount = total,
                 ForumEntries = result
             };
+        }
+
+        public async Task<ForumEntryResponse> Update(UpdateForumEntryRequest request)
+        {
+            var forumEntry = _forumEntryRepository.GetById(request.ForumEntryId);
+            var authorization = await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, forumEntry, Operations.Update);
+
+            if (!authorization.Succeeded) throw new ApiResponseException { StatusCode = 403 };
+
+            var result = _forumEntryRepository.Update(request.ForumEntryId, request.Text);
+
+            var response = _mapper.Map<ForumEntryResponse>(result);
+            return response;
         }
     }
 }

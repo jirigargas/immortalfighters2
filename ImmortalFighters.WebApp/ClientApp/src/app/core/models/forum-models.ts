@@ -27,3 +27,8 @@ export class createNewForumEntryRequest {
     forumId: number = -1;
     text: string = "";
 }
+
+export class updateForumEntryRequest {
+    forumEntryId: number = -1;
+    text: string = "";
+}

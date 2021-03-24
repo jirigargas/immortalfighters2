@@ -12,6 +12,7 @@ namespace ImmortalFighters.WebApp.Services
     public interface IForumRepository
     {
         IEnumerable<Forum> GetAll();
+        IEnumerable<Forum> GetAllAccessibleTo(User user);
         IEnumerable<string> GetAllCategories();
         Forum Create(CreateNewForumRequest request);
         Task<Forum> GetByIdWithAccessRights(int forumId);
@@ -68,6 +69,19 @@ namespace ImmortalFighters.WebApp.Services
         public IEnumerable<Forum> GetAll()
         {
             return _context.Forums.Select(x => x);
+        }
+
+        public IEnumerable<Forum> GetAllAccessibleTo(User user)
+        {
+            _context.Entry(user).Collection(x => x.ForumUserAccessRights).Load();
+
+            var forums = _context.Forums.Include(x => x.AccessRights).AsEnumerable();
+            var userRoleIds = user.UserRoles.Select(x => x.RoleId);
+
+            return forums
+                .Where(x => user.UserRoles.Select(x => x.Role.Name).Contains(Consts.RoleAdmin)
+                || x.AccessRights.OfType<ForumRoleAccessRight>().Any(r => r.CanRead && userRoleIds.Contains(r.RoleId)
+                || user.ForumUserAccessRights.Any(r => r.CanRead && r.ForumId == x.ForumId)));
         }
 
         public IEnumerable<string> GetAllCategories()

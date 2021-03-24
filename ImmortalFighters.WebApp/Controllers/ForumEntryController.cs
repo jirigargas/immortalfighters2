@@ -38,5 +38,12 @@ namespace ImmortalFighters.WebApp.Controllers
             var response = await _forumEntryService.Delete(forumEntryId);
             return Ok(response);
         }
+
+        [HttpPatch]
+        public async Task<IActionResult> Patch([FromBody] UpdateForumEntryRequest request)
+        {
+            var response = await _forumEntryService.Update(request);
+            return Ok(response);
+        }
     }
 }

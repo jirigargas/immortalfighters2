@@ -30,6 +30,11 @@ namespace ImmortalFighters.WebApp.Helpers.AuthorizationHandlers
                 context.Succeed(requirement);
             }
 
+            if(requirement.Name == Operations.Update.Name && resource.User == user)
+            {
+                context.Succeed(requirement);
+            }
+
             return Task.CompletedTask;
         }
 

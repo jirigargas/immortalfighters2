@@ -11,6 +11,7 @@ namespace ImmortalFighters.WebApp.Services
         IQueryable<ForumEntry> GetPage(int forumId, int page, int pageSize);
         int Count(int forumId);
         ForumEntry Delete(int forumEntryId);
+        ForumEntry Update(int forumEntryId, string text);
     }
 
     public class ForumEntryRepository : IForumEntryRepository
@@ -50,6 +51,8 @@ namespace ImmortalFighters.WebApp.Services
         {
             var forumEntry = _context.ForumEntries.Find(forumEntryId);
             forumEntry.Status = ForumEntryStatus.Deleted;
+            forumEntry.Changed = DateTime.UtcNow;
+
             _context.SaveChanges();
             return forumEntry;
         }
@@ -67,6 +70,16 @@ namespace ImmortalFighters.WebApp.Services
                 .OrderByDescending(x => x.Created)
                 .Skip(pageSize * page)
                 .Take(pageSize);
+        }
+
+        public ForumEntry Update(int forumEntryId, string text)
+        {
+            var forumEntry = _context.ForumEntries.Find(forumEntryId);
+            forumEntry.Text = text;
+            forumEntry.Changed = DateTime.UtcNow;
+
+            _context.SaveChanges();
+            return forumEntry;
         }
     }
 }
