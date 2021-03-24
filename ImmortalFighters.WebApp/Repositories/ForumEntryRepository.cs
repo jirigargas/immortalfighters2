@@ -1,15 +1,16 @@
 ﻿using ImmortalFighters.WebApp.Models;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ImmortalFighters.WebApp.Services
 {
     public interface IForumEntryRepository
     {
-        Task<ForumEntry> Create(int forumId, int userId, string text);
-        IQueryable<ForumEntry> Get(int forumId, int page, int pageSize);
+        ForumEntry Create(int forumId, int userId, string text);
+        ForumEntry GetById(int forumEntryId);
+        IQueryable<ForumEntry> GetPage(int forumId, int page, int pageSize);
         int Count(int forumId);
+        ForumEntry Delete(int forumEntryId);
     }
 
     public class ForumEntryRepository : IForumEntryRepository
@@ -26,7 +27,7 @@ namespace ImmortalFighters.WebApp.Services
             return _context.ForumEntries.Count(x => x.ForumId == forumId);
         }
 
-        public async Task<ForumEntry> Create(int forumId, int userId, string text)
+        public ForumEntry Create(int forumId, int userId, string text)
         {
             var forum = _context.Forums.Find(forumId);
             var user = _context.Users.Find(userId);
@@ -45,10 +46,24 @@ namespace ImmortalFighters.WebApp.Services
             return newEntry;
         }
 
-        public IQueryable<ForumEntry> Get(int forumId, int page, int pageSize)
+        public ForumEntry Delete(int forumEntryId)
+        {
+            var forumEntry = _context.ForumEntries.Find(forumEntryId);
+            forumEntry.Status = ForumEntryStatus.Deleted;
+            _context.SaveChanges();
+            return forumEntry;
+        }
+
+        public ForumEntry GetById(int forumEntryId)
+        {
+            return _context.ForumEntries.Find(forumEntryId);
+        }
+
+        public IQueryable<ForumEntry> GetPage(int forumId, int page, int pageSize)
         {
             return _context.ForumEntries
                 .Where(x => x.ForumId == forumId)
+                .Where(x => x.Status == ForumEntryStatus.Active)
                 .OrderByDescending(x => x.Created)
                 .Skip(pageSize * page)
                 .Take(pageSize);

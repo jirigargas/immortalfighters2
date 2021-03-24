@@ -31,5 +31,12 @@ namespace ImmortalFighters.WebApp.Controllers
             var response = await _forumEntryService.Create(request);
             return Ok(response);
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromQuery] int forumEntryId)
+        {
+            var response = await _forumEntryService.Delete(forumEntryId);
+            return Ok(response);
+        }
     }
 }

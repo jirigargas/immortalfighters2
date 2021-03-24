@@ -13,6 +13,7 @@ namespace ImmortalFighters.WebApp.Services
     {
         Task<ForumEntriesResponse> GetForumEntries(int forumId, int page, int pageSize);
         Task<ForumEntryResponse> Create(CreateNewForumEntryRequest request);
+        Task<ForumEntryResponse> Delete(int forumEntryId);
     }
 
     public class ForumEntryService : IForumEntryService
@@ -44,8 +45,19 @@ namespace ImmortalFighters.WebApp.Services
             if (!authorization.Succeeded) throw new ApiResponseException { StatusCode = 403 };
 
             var user = _httpContextAccessor.HttpContext.Items[Consts.HttpContextUser] as User;
-            var result = await _forumEntryRepository.Create(request.ForumId, user.UserId, request.Text);
+            var result = _forumEntryRepository.Create(request.ForumId, user.UserId, request.Text);
 
+            var response = _mapper.Map<ForumEntryResponse>(result);
+            return response;
+        }
+
+        public async Task<ForumEntryResponse> Delete(int forumEntryId)
+        {
+            var forumEntry = _forumEntryRepository.GetById(forumEntryId);
+            var authorization = await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, forumEntry, Operations.Delete);
+            if (!authorization.Succeeded) throw new ApiResponseException { StatusCode = 403 };
+
+            var result = _forumEntryRepository.Delete(forumEntryId);
             var response = _mapper.Map<ForumEntryResponse>(result);
             return response;
         }
@@ -58,7 +70,7 @@ namespace ImmortalFighters.WebApp.Services
             if (!authorization.Succeeded) throw new ApiResponseException { StatusCode = 403 };
 
             var total = _forumEntryRepository.Count(forumId);
-            var result = _forumEntryRepository.Get(forumId, page, pageSize)
+            var result = _forumEntryRepository.GetPage(forumId, page, pageSize)
                 .AsEnumerable()
                 .Select(x => _mapper.Map<ForumEntryResponse>(x));
 

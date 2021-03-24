@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
-namespace ImmortalFighters.WebApp.Helpers
+namespace ImmortalFighters.WebApp.Helpers.AuthorizationHandlers
 {
     public class ForumEntryCrudAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, ForumEntry>
     {
@@ -19,10 +19,15 @@ namespace ImmortalFighters.WebApp.Helpers
         {
             var user = _contextAccessor.HttpContext.Items[Consts.HttpContextUser] as User;
 
-            if (requirement.Name == Operations.Create.Name 
+            if (requirement.Name == Operations.Create.Name
                 && resource.Forum.CanUserPerformOperation(user, x => x.CanWrite))
             {
-                context.Succeed(requirement); 
+                context.Succeed(requirement);
+            }
+
+            if (requirement.Name == Operations.Delete.Name && resource.User == user)
+            {
+                context.Succeed(requirement);
             }
 
             return Task.CompletedTask;

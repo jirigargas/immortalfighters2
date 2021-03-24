@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
-namespace ImmortalFighters.WebApp.Helpers
+namespace ImmortalFighters.WebApp.Helpers.AuthorizationHandlers
 {
     public class ForumCrudAuthorizationCrudHandler : AuthorizationHandler<OperationAuthorizationRequirement, Forum>
     {
@@ -19,7 +19,7 @@ namespace ImmortalFighters.WebApp.Helpers
         {
             var user = _contextAccessor.HttpContext.Items[Consts.HttpContextUser] as User;
 
-            if (requirement.Name == Operations.Read.Name 
+            if (requirement.Name == Operations.Read.Name
                 && resource.CanUserPerformOperation(user, x => x.CanRead))
             {
                 context.Succeed(requirement);

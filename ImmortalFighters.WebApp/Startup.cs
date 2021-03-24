@@ -1,4 +1,5 @@
 using ImmortalFighters.WebApp.Helpers;
+using ImmortalFighters.WebApp.Helpers.AuthorizationHandlers;
 using ImmortalFighters.WebApp.Middlewares;
 using ImmortalFighters.WebApp.Models;
 using ImmortalFighters.WebApp.Repositories;
