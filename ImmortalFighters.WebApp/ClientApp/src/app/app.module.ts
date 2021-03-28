@@ -7,7 +7,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
-import { DraciDoupeModule } from './draci-doupe/draci-doupe.module';
 
 @NgModule({
   declarations: [
@@ -19,8 +18,7 @@ import { DraciDoupeModule } from './draci-doupe/draci-doupe.module';
     AppRoutingModule,
     BrowserAnimationsModule,
     CoreModule,
-    SharedModule,
-    DraciDoupeModule
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]

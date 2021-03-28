@@ -1,26 +1,34 @@
 <mat-toolbar color="primary" class="mat-elevation-z8">
-    <button mat-icon-button aria-label="menu" (click)="drawer.toggle()">
+    <button mat-icon-button aria-label="menu" (click)="navigationMenu.toggle()" matTooltip="hlavní menu">
         <mat-icon>menu</mat-icon>
     </button>
     <span>Immortal Fighters</span>
     <span class="spacer"></span>
     <span>{{module}}</span>
     <span class="spacer"></span>
-    <a mat-icon-button (click)="signOut()" aria-label="odhlásit se">
+    <button mat-icon-button aria-label="menu" (click)="playerMenu.toggle()" matTooltip="moje menu">
+        <mat-icon>manage_accounts</mat-icon>
+    </button>
+    <a mat-icon-button (click)="signOut()" aria-label="odhlásit se" matTooltip="odhlásit se">
         <mat-icon>logout</mat-icon>
     </a>
 </mat-toolbar>
 
-<mat-drawer-container class="container" autosize>
-    <mat-drawer #drawer mode="side" opened>
+<mat-sidenav-container class="container" autosize>
+    <mat-sidenav #navigationMenu mode="side" opened>
         <mat-nav-list #navigation (click)="handleNavigation($event)">
             <a mat-list-item [routerLink]="['/main/quest']"> Dobrodružství </a>
             <a mat-list-item [routerLink]="['/main/dungeon']"> Jeskyně </a>
             <mat-divider></mat-divider>
             <a mat-list-item [routerLink]="['/main/forum']"> Fóra </a>
         </mat-nav-list>
-    </mat-drawer>
-    <mat-drawer-content class="main-content">
+    </mat-sidenav>
+    <mat-sidenav #playerMenu mode="side" position="end" opened>
+        <mat-nav-list #navigation (click)="handleNavigation($event)">
+            <a mat-list-item [routerLink]="['/main/characters/my']"> Moje postavy </a>
+        </mat-nav-list>
+    </mat-sidenav>
+    <div class="main-content">
         <router-outlet></router-outlet>
-    </mat-drawer-content>
-</mat-drawer-container>
+    </div>
+</mat-sidenav-container>
