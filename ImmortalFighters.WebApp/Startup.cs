@@ -64,6 +64,7 @@ namespace ImmortalFighters.WebApp
             services.AddScoped<Seeder>();
             services.AddScoped<ISeeder, RoleSeeder>();
             services.AddScoped<ISeeder, UserSeeder>();
+            services.AddScoped<ISeeder, ForumSeeder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
