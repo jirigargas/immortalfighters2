@@ -15,6 +15,7 @@ namespace ImmortalFighters.WebApp.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasAnnotation("Relational:Collation", "Czech_CI_AS")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -50,6 +51,10 @@ namespace ImmortalFighters.WebApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -61,6 +66,45 @@ namespace ImmortalFighters.WebApp.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Characters");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Character");
+                });
+
+            modelBuilder.Entity("ImmortalFighters.WebApp.Models.CharacterEquipment", b =>
+                {
+                    b.Property<int>("CharacterEquipmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EquipmentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CharacterEquipmentId");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("EquipmentId");
+
+                    b.ToTable("CharacterEquipment");
+                });
+
+            modelBuilder.Entity("ImmortalFighters.WebApp.Models.Equipment", b =>
+                {
+                    b.Property<int>("EquipmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("EquipmentId");
+
+                    b.ToTable("Equipment");
                 });
 
             modelBuilder.Entity("ImmortalFighters.WebApp.Models.Forum", b =>
@@ -286,6 +330,60 @@ namespace ImmortalFighters.WebApp.Migrations
                     b.HasDiscriminator().HasValue("ForumAccessRight");
                 });
 
+            modelBuilder.Entity("ImmortalFighters.WebApp.Models.Drd2Character", b =>
+                {
+                    b.HasBaseType("ImmortalFighters.WebApp.Models.Character");
+
+                    b.Property<int>("Rasa")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("int")
+                        .HasColumnName("Rasa");
+
+                    b.HasDiscriminator().HasValue("Drd2Character");
+                });
+
+            modelBuilder.Entity("ImmortalFighters.WebApp.Models.DrdCharacter", b =>
+                {
+                    b.HasBaseType("ImmortalFighters.WebApp.Models.Character");
+
+                    b.Property<int>("Charisma")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Inteligence")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Obratnost")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Odolnost")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Povolani")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Presvedceni")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Rasa")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("int")
+                        .HasColumnName("Rasa");
+
+                    b.Property<int>("Sila")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Uroven")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Zivoty")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Zkusenosti")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("DrdCharacter");
+                });
+
             modelBuilder.Entity("ImmortalFighters.WebApp.Models.ForumRoleAccessRight", b =>
                 {
                     b.HasBaseType("ImmortalFighters.WebApp.Models.ForumAccessRight");
@@ -319,6 +417,25 @@ namespace ImmortalFighters.WebApp.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ImmortalFighters.WebApp.Models.CharacterEquipment", b =>
+                {
+                    b.HasOne("ImmortalFighters.WebApp.Models.Character", "Character")
+                        .WithMany("Vybaveni")
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ImmortalFighters.WebApp.Models.Equipment", "Equipment")
+                        .WithMany()
+                        .HasForeignKey("EquipmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Character");
+
+                    b.Navigation("Equipment");
                 });
 
             modelBuilder.Entity("ImmortalFighters.WebApp.Models.Forum", b =>
@@ -463,6 +580,8 @@ namespace ImmortalFighters.WebApp.Migrations
                     b.Navigation("QuestCharacters");
 
                     b.Navigation("QuestEntries");
+
+                    b.Navigation("Vybaveni");
                 });
 
             modelBuilder.Entity("ImmortalFighters.WebApp.Models.Forum", b =>

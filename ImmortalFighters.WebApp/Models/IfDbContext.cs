@@ -10,10 +10,11 @@ namespace ImmortalFighters.WebApp.Models
         public DbSet<Character> Characters { get; set; }
         public DbSet<Quest> Quests { get; set; }
         public DbSet<QuestCharacter> QuestCharacters { get; set; }
+        public DbSet<Equipment> Equipment { get; set; }
+        public DbSet<CharacterEquipment> CharacterEquipment { get; set; }
         public DbSet<QuestEntry> QuestEntries { get; set; }
         public DbSet<Forum> Forums { get; set; }
-        public DbSet<ForumRoleAccessRight> ForumRoleAccessRights { get; set; }
-        public DbSet<ForumUserAccessRight> ForumUserAccessRights { get; set; }
+        public DbSet<AccessRight> AccessRights { get; set; }
         public DbSet<ForumEntry> ForumEntries { get; set; }
 
         public IfDbContext(DbContextOptions<IfDbContext> options) : base(options)
@@ -23,6 +24,8 @@ namespace ImmortalFighters.WebApp.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.UseCollation("Czech_CI_AS");
 
             modelBuilder.Entity<User>()
                 .HasIndex(x => x.Email)
@@ -55,12 +58,15 @@ namespace ImmortalFighters.WebApp.Models
                 .OnDelete(DeleteBehavior.NoAction)
                 .IsRequired();
 
-            modelBuilder.Entity<Character>()
-                .HasOne(x => x.User)
-                .WithMany(x => x.Characters)
+            modelBuilder.Entity<User>()
+                .HasMany(x => x.Characters)
+                .WithOne(x => x.User)
                 .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.NoAction)
                 .IsRequired();
+
+            modelBuilder.Entity<DrdCharacter>().Property(x => x.Rasa).HasColumnName("Rasa");
+            modelBuilder.Entity<Drd2Character>().Property(x => x.Rasa).HasColumnName("Rasa");
 
             modelBuilder.Entity<Quest>()
                 .HasOne(x => x.DungeonMaster)
@@ -82,6 +88,7 @@ namespace ImmortalFighters.WebApp.Models
                 .HasForeignKey(x => x.CharacterId)
                 .OnDelete(DeleteBehavior.NoAction)
                 .IsRequired();
+
 
             modelBuilder.Entity<QuestEntry>()
                 .HasOne(x => x.Quest)
@@ -118,8 +125,6 @@ namespace ImmortalFighters.WebApp.Models
                 .HasMany(x => x.AccessRights)
                 .WithOne(x => x.Forum)
                 .HasForeignKey(x => x.ForumId);
-
-            modelBuilder.Entity<AccessRight>().ToTable("AccessRights");
 
             modelBuilder.Entity<ForumRoleAccessRight>()
                 .HasOne(x => x.Role)

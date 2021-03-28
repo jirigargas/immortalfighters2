@@ -8,6 +8,19 @@ namespace ImmortalFighters.WebApp.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Equipment",
+                columns: table => new
+                {
+                    EquipmentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Equipment", x => x.EquipmentId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
@@ -47,7 +60,19 @@ namespace ImmortalFighters.WebApp.Migrations
                     CharacterId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rasa = table.Column<int>(type: "int", nullable: true),
+                    Povolani = table.Column<int>(type: "int", nullable: true),
+                    Sila = table.Column<int>(type: "int", nullable: true),
+                    Obratnost = table.Column<int>(type: "int", nullable: true),
+                    Odolnost = table.Column<int>(type: "int", nullable: true),
+                    Inteligence = table.Column<int>(type: "int", nullable: true),
+                    Charisma = table.Column<int>(type: "int", nullable: true),
+                    Zivoty = table.Column<int>(type: "int", nullable: true),
+                    Zkusenosti = table.Column<int>(type: "int", nullable: true),
+                    Uroven = table.Column<int>(type: "int", nullable: true),
+                    Presvedceni = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -121,6 +146,32 @@ namespace ImmortalFighters.WebApp.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CharacterEquipment",
+                columns: table => new
+                {
+                    CharacterEquipmentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CharacterId = table.Column<int>(type: "int", nullable: false),
+                    EquipmentId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CharacterEquipment", x => x.CharacterEquipmentId);
+                    table.ForeignKey(
+                        name: "FK_CharacterEquipment_Characters_CharacterId",
+                        column: x => x.CharacterId,
+                        principalTable: "Characters",
+                        principalColumn: "CharacterId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CharacterEquipment_Equipment_EquipmentId",
+                        column: x => x.EquipmentId,
+                        principalTable: "Equipment",
+                        principalColumn: "EquipmentId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -261,6 +312,16 @@ namespace ImmortalFighters.WebApp.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CharacterEquipment_CharacterId",
+                table: "CharacterEquipment",
+                column: "CharacterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CharacterEquipment_EquipmentId",
+                table: "CharacterEquipment",
+                column: "EquipmentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Characters_UserId",
                 table: "Characters",
                 column: "UserId");
@@ -329,6 +390,9 @@ namespace ImmortalFighters.WebApp.Migrations
                 name: "AccessRights");
 
             migrationBuilder.DropTable(
+                name: "CharacterEquipment");
+
+            migrationBuilder.DropTable(
                 name: "ForumEntries");
 
             migrationBuilder.DropTable(
@@ -339,6 +403,9 @@ namespace ImmortalFighters.WebApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserRoles");
+
+            migrationBuilder.DropTable(
+                name: "Equipment");
 
             migrationBuilder.DropTable(
                 name: "Forums");

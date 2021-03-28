@@ -50,7 +50,7 @@ namespace ImmortalFighters.WebApp.Services
                     CanRead = accessRight.CanRead,
                     CanWrite = accessRight.CanWrite
                 };
-                _context.ForumRoleAccessRights.Add(forumRoleAccessRight);
+                _context.AccessRights.Add(forumRoleAccessRight);
             }
 
             var adminRoleAccessRight = new ForumRoleAccessRight
@@ -60,7 +60,7 @@ namespace ImmortalFighters.WebApp.Services
                 CanRead = true,
                 CanWrite = true
             };
-            _context.ForumRoleAccessRights.Add(adminRoleAccessRight);
+            _context.AccessRights.Add(adminRoleAccessRight);
 
             _context.SaveChanges();
             return newForum;
