@@ -2,6 +2,7 @@ using ImmortalFighters.WebApp.Helpers;
 using ImmortalFighters.WebApp.Helpers.AuthorizationHandlers;
 using ImmortalFighters.WebApp.Middlewares;
 using ImmortalFighters.WebApp.Models;
+using ImmortalFighters.WebApp.Models.Seed;
 using ImmortalFighters.WebApp.Repositories;
 using ImmortalFighters.WebApp.Services;
 using ImmortalFighters.WebApp.Settings;
@@ -58,10 +59,15 @@ namespace ImmortalFighters.WebApp
             services.AddAuthorization();
             services.AddTransient<IAuthorizationHandler, ForumCrudAuthorizationCrudHandler>();
             services.AddTransient<IAuthorizationHandler, ForumEntryCrudAuthorizationHandler>();
+
+            // seeding data
+            services.AddScoped<Seeder>();
+            services.AddScoped<ISeeder, RoleSeeder>();
+            services.AddScoped<ISeeder, UserSeeder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IfDbContext dbContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IfDbContext dbContext, Seeder seeder)
         {
             if (env.IsDevelopment())
             {
@@ -107,6 +113,12 @@ namespace ImmortalFighters.WebApp
 
             // migrate any database changes on startup (includes initial db creation)
             dbContext.Database.Migrate();
+
+            if (env.IsDevelopment())
+            {
+                seeder.Seed();
+            }
         }
+
     }
 }
