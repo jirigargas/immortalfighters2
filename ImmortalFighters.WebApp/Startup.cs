@@ -50,10 +50,12 @@ namespace ImmortalFighters.WebApp
             services.AddScoped<IForumRepository, ForumRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IForumEntryRepository, ForumEntryRepository>();
+            services.AddScoped<ICharacterRepository, CharacterRepository>();
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IAuthenticationProvider, AuthenticationProvider>();
             services.AddScoped<IForumEntryService, ForumEntryService>();
+            services.AddScoped<ICharacterService, CharacterService>();
 
             // imperative authorization
             services.AddAuthorization();

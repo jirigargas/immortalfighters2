@@ -1,1 +1,5 @@
 <p>my-characters works!</p>
+<button mat-button color="primary" (click)="createNewDrdCharacter()">Vytvořit novou postavu</button>
+<ul>
+    <li *ngFor="let character of (characters$ | async)">{{character | json}}</li>
+</ul>
