@@ -21,7 +21,7 @@ namespace ImmortalFighters.WebApp.Models.Seed
             {
                 var context = scope.ServiceProvider.GetService<IfDbContext>();
 
-                var generalForum = context.Forums.FirstOrDefault(x => x.Name == "Obecné");
+                var generalForum = context.Forums.FirstOrDefault(x => x.Name == "Obecné forum");
                 if (generalForum == null)
                 {
                     var newForum = new Forum

@@ -1,0 +1,52 @@
+<form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <mat-form-field class="full-width">
+        <mat-label>Jméno</mat-label>
+        <input type="text" matInput formControlName="name" [errorStateMatcher]="matcher">
+        <mat-error *ngIf="form.controls['name'].hasError('required')">
+            Jméno postavy je vyžadované
+        </mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Rasa</mat-label>
+        <mat-select formControlName="race">
+            <mat-option value="0">Hobit</mat-option>
+            <mat-option value="1">Kudůk</mat-option>
+            <mat-option value="2">Trpaslík</mat-option>
+            <mat-option value="3">Elf</mat-option>
+            <mat-option value="4">Člověk</mat-option>
+            <mat-option value="5">Barbar</mat-option>
+            <mat-option value="6">Kroll</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Povolání</mat-label>
+        <mat-select formControlName="class">
+            <mat-option value="0">Válečník</mat-option>
+            <mat-option value="3">Hraničář</mat-option>
+            <mat-option value="6">Alchymista</mat-option>
+            <mat-option value="9">Kouzelník</mat-option>
+            <mat-option value="12">Zloděj</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Přesvědčení</mat-label>
+        <mat-select formControlName="conviction">
+            <mat-option value="0">Zákonné dobro</mat-option>
+            <mat-option value="1">Zmatené dobro</mat-option>
+            <mat-option value="2">Neutrální</mat-option>
+            <mat-option value="3">Zmatené zlo</mat-option>
+            <mat-option value="4">Zákonné zlo</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <div class="form-actions">
+        <button mat-button mat-dialog-close>Zpět</button>
+        <button type="submit" [disabled]="!form.valid" mat-raised-button color="accent">Vytvořit postavu</button>
+    </div>
+
+</form>
