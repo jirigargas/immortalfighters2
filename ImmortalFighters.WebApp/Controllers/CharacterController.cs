@@ -29,15 +29,9 @@ namespace ImmortalFighters.WebApp.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult CreateDrdCharacter()
+        public IActionResult CreateDrdCharacter(CreateDrdCharacterRequest request)
         {
-            var response = _characterService.CreateDrdCharacter(new CreateDrdCharacterRequest
-            {
-                Name = "test",
-                Race = Models.DrdRasa.Clovek,
-                Class = Models.DrdPovolani.Valecnik,
-                Conviction = Models.DrdPresvedceni.ZakonneDobro
-            });
+            var response = _characterService.CreateDrdCharacter(request);
             return Ok(response);
         }
     }

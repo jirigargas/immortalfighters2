@@ -12,7 +12,6 @@ import { BadRequestInterceptor } from './interceptors/bad-request.interceptor';
 import { ForbiddenInterceptor } from './interceptors/forbidden.interceptor';
 
 @NgModule({
-  declarations: [],
   imports: [
     CommonModule,
     HttpClientModule,

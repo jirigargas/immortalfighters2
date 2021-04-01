@@ -1,5 +1,48 @@
-<p>my-characters works!</p>
-<button mat-button color="primary" (click)="createNewDrdCharacter()">Vytvořit novou postavu</button>
-<ul>
-    <li *ngFor="let character of (characters$ | async)">{{character | json}}</li>
-</ul>
+<div class="container">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Dračí doupě</mat-card-title>
+            <mat-card-subtitle>&nbsp;</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="character-image-container" >
+                <img src="assets/pictures/unknown-character.png" alt="nová postava pro Dračí doupě" />
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="accent" (click)="createNewDrdCharacter()">Vytvořit postavu</button>
+        </mat-card-actions>
+    </mat-card>
+
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Dračí doupě 2</mat-card-title>
+            <mat-card-subtitle>&nbsp;</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="character-image-container" >
+                <img src="assets/pictures/unknown-character.png" alt="nová postava pro Dračí doupě 2" />
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="accent" disabled>Vytvořit postavu</button>
+        </mat-card-actions>
+    </mat-card>
+
+    <mat-card *ngFor="let character of (characters$ | async)">
+        <mat-card-header>
+            <mat-card-title>{{character.name}}</mat-card-title>
+            <mat-card-subtitle>{{character.rules | rulesToReadableString}}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="character-image-container" >
+                <img src="assets/pictures/unknown-character.png" alt="{{character.name}}" />
+            </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+            <button mat-raised-button color="primary" [routerLink]="[character.characterId]">Detail</button>
+        </mat-card-actions>
+    </mat-card>
+</div>

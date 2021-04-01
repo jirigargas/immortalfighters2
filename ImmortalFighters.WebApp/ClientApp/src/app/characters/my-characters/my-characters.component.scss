@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+    mat-card {
+        margin: 1vmin;
+    }
+
+    mat-card-actions > button {
+        width: 175px;
+    }
+    
+}
+
+
+.character-image-container {
+    height: 5vmax;
+    img {
+       height: inherit; 
+       display: block;
+       margin-left: auto;
+       margin-right: auto;     
+    }
+}

@@ -1,5 +1,10 @@
 export class CharacterResponse {
-    id: number = -1;
+    characterId: number = -1;
     name: string = "";
-    rules: string = "";
+    rules: Rules = Rules.DraciDoupe;
 }
+
+export enum Rules {
+    DraciDoupe = 0,
+    DraciDoupe2 = 1
+} 
