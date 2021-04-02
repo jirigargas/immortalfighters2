@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ImmortalFighters.WebApp.ApiModels;
+using ImmortalFighters.WebApp.Helpers;
 using ImmortalFighters.WebApp.Models;
 using ImmortalFighters.WebApp.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +14,7 @@ namespace ImmortalFighters.WebApp.Services
         public IEnumerable<CharacterResponse> GetMyCharacters();
         CharacterResponse CreateDrdCharacter(CreateDrdCharacterRequest createDrdCharacterRequest);
         ICharacterDetailResponse GetDetail(int characterId);
+        void SetAvatar(int charactedId, string base64File);
     }
 
     public class CharacterService : ICharacterService
@@ -74,6 +76,15 @@ namespace ImmortalFighters.WebApp.Services
             var user = _httpContextAccessor.HttpContext.Items[Consts.HttpContextUser] as User;
             var response = _characterRepository.GetByUserId(user.UserId);
             return response.Select(x => _mapper.Map<CharacterResponse>(x));
+        }
+
+        public void SetAvatar(int charactedId, string base64File)
+        {
+            var character = _characterRepository.GetById(charactedId);
+            var currentUser = _httpContextAccessor.HttpContext.Items[Consts.HttpContextUser] as User;
+            if (character.UserId != currentUser.UserId) throw new ApiResponseException();
+
+            _characterRepository.SetAvatar(charactedId, base64File);
         }
     }
 }

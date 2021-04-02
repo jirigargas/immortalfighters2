@@ -1,1 +1,12 @@
+
+
+
 <pre>{{character$ | async | json}}</pre>
+
+<form [formGroup]="avatarForm" (ngSubmit)="onAvatarSubmit()">
+    <input type="file" accept="image/jpeg" formControlName="file" (change)="onFileChange($event)" />    
+    
+    <div class="form-actions">
+        <button type="submit" [disabled]="!avatarForm.valid" mat-raised-button color="accent">Změnit avatar</button>
+    </div>
+</form>

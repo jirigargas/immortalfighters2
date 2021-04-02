@@ -2,6 +2,11 @@ export class CharacterResponse {
     characterId: number = -1;
     name: string = "";
     rules: Rules = Rules.DraciDoupe;
+    avatar: string | undefined;
+}
+
+export class CharacterDetailResponse {
+    characterId: number = -1;
 }
 
 export enum Rules {

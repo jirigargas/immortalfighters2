@@ -36,8 +36,11 @@
         </mat-card-header>
 
         <mat-card-content>
-            <div class="character-image-container" >
+            <div class="character-image-container" *ngIf="!character.avatar">
                 <img src="assets/pictures/unknown-character.png" alt="{{character.name}}" />
+            </div>
+            <div class="character-image-container" *ngIf="character.avatar">
+                <img src="data:image/jpeg;base64,{{character.avatar}}" alt="{{character.name}}" />
             </div>
         </mat-card-content>
 

@@ -8,6 +8,7 @@ namespace ImmortalFighters.WebApp.Models
         public string Name { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
+        public string Avatar { get; set; }
         public CharacterStatus Status {get;set;}
         public ICollection<QuestCharacter> QuestCharacters { get; set; }
         public ICollection<QuestEntry> QuestEntries { get; set; }

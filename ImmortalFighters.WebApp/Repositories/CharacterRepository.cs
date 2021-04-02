@@ -9,6 +9,7 @@ namespace ImmortalFighters.WebApp.Repositories
         public IEnumerable<Character> GetByUserId(int userId);
         public DrdCharacter CreateCharacter(DrdCharacter drdCharacter);
         Character GetById(int characterId);
+        void SetAvatar(int characterId, string avatarBase64);
     }
 
     public class CharacterRepository : ICharacterRepository
@@ -35,6 +36,13 @@ namespace ImmortalFighters.WebApp.Repositories
         public IEnumerable<Character> GetByUserId(int userId)
         {
             return _context.Characters.Where(x => x.UserId == userId);
+        }
+
+        public void SetAvatar(int characterId, string avatar)
+        {
+            var character = _context.Characters.Find(characterId);
+            character.Avatar = avatar;
+            _context.SaveChanges();
         }
     }
 }
