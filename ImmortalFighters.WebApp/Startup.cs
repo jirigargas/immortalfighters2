@@ -56,6 +56,8 @@ namespace ImmortalFighters.WebApp
             services.AddTransient<IAuthenticationProvider, AuthenticationProvider>();
             services.AddScoped<IForumEntryService, ForumEntryService>();
             services.AddScoped<ICharacterService, CharacterService>();
+            services.AddScoped<IDrdCharacterCreator, DrdCharacterCreator>();
+            services.AddScoped<IDrdBonusOrPenaltyService, DrdBonusOrPenaltyService>();
 
             // imperative authorization
             services.AddAuthorization();
