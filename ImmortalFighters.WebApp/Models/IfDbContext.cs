@@ -68,6 +68,9 @@ namespace ImmortalFighters.WebApp.Models
             modelBuilder.Entity<DrdCharacter>().Property(x => x.Rasa).HasColumnName("Rasa");
             modelBuilder.Entity<Drd2Character>().Property(x => x.Rasa).HasColumnName("Rasa");
 
+            modelBuilder.Entity<DrdCharacter>().Property(x => x.Name).IsRequired();
+            modelBuilder.Entity<Drd2Character>().Property(x => x.Name).IsRequired();
+
             modelBuilder.Entity<Quest>()
                 .HasOne(x => x.DungeonMaster)
                 .WithMany(x => x.OrganizedQuests)

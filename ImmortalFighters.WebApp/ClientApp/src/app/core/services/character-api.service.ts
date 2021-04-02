@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CharacterResponse, NewDrdCharacter } from '../models/character-models';
 
@@ -18,6 +18,10 @@ export class CharacterApiService {
 
     createNewDrdCharacter(request: NewDrdCharacter): Observable<CharacterResponse> {
         return this.httpClient.post<CharacterResponse>(this.baseUrl + "Character/CreateDrdCharacter", request);
+    }
+
+    getDetails(characterId: number): Observable<{}> {
+        return this.httpClient.get<{}>(this.baseUrl + "Character/" + characterId);
     }
 
 

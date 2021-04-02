@@ -8,10 +8,17 @@ namespace ImmortalFighters.WebApp.Models
         public string Name { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
+        public CharacterStatus Status {get;set;}
         public ICollection<QuestCharacter> QuestCharacters { get; set; }
         public ICollection<QuestEntry> QuestEntries { get; set; }
-
         public ICollection<CharacterEquipment> Vybaveni { get; set; }
+    }
+
+    public enum CharacterStatus
+    {
+        Active,
+        Dead,
+        Deleted
     }
 
     public class DrdCharacter : Character

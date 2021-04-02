@@ -12,6 +12,7 @@ namespace ImmortalFighters.WebApp.Services
     {
         public IEnumerable<CharacterResponse> GetMyCharacters();
         CharacterResponse CreateDrdCharacter(CreateDrdCharacterRequest createDrdCharacterRequest);
+        ICharacterDetailResponse GetDetail(int characterId);
     }
 
     public class CharacterService : ICharacterService
@@ -41,6 +42,7 @@ namespace ImmortalFighters.WebApp.Services
             var character = new DrdCharacter
             {
                 User = user,
+                Status = CharacterStatus.Active,
                 Name = request.Name,
                 Rasa = request.Race,
                 Povolani = request.Class,
@@ -58,6 +60,13 @@ namespace ImmortalFighters.WebApp.Services
 
             var response = _characterRepository.CreateCharacter(character);
             return _mapper.Map<CharacterResponse>(response);
+        }
+
+        public ICharacterDetailResponse GetDetail(int characterId)
+        {
+            // TODO implement all the checks here
+            var character = _characterRepository.GetById(characterId);
+            return _mapper.Map<ICharacterDetailResponse>(character);
         }
 
         public IEnumerable<CharacterResponse> GetMyCharacters()

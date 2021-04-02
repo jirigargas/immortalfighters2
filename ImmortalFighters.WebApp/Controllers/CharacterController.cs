@@ -34,5 +34,12 @@ namespace ImmortalFighters.WebApp.Controllers
             var response = _characterService.CreateDrdCharacter(request);
             return Ok(response);
         }
+
+        [HttpGet("{characterId:int}")]
+        public IActionResult GetById(int characterId)
+        {
+            var response = _characterService.GetDetail(characterId);
+            return Ok(response);
+        }
     }
 }

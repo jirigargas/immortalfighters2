@@ -8,6 +8,7 @@ namespace ImmortalFighters.WebApp.Repositories
     {
         public IEnumerable<Character> GetByUserId(int userId);
         public DrdCharacter CreateCharacter(DrdCharacter drdCharacter);
+        Character GetById(int characterId);
     }
 
     public class CharacterRepository : ICharacterRepository
@@ -24,6 +25,11 @@ namespace ImmortalFighters.WebApp.Repositories
             _context.Characters.Add(character);
             _context.SaveChanges();
             return character;
+        }
+
+        public Character GetById(int characterId)
+        {
+            return _context.Characters.Find(characterId);
         }
 
         public IEnumerable<Character> GetByUserId(int userId)
