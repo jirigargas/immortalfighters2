@@ -15,7 +15,10 @@ export class DrdCharacterDetailResponse {
     odolnost: number = 0;
     inteligence: number = 0;
     charisma: number = 0;
+    maxZivoty: number = 0;
     zivoty: number = 0;
+    maxMagy: number = 0;
+    magy: number = 0;
     zkusenosti: number = 0;
     uroven: number = 0;
     presvedceni: DrdPresvedceni = DrdPresvedceni.ZakonneDobro;

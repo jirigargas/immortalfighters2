@@ -17,7 +17,7 @@ export class DrdCharacterDetailComponent implements OnInit {
 
   characterChangedObserver: PartialObserver<void> = {
     next: () => {
-      this.snacbarService.notifySuccess("Avatar byl změněn")
+      this.snacbarService.notifySuccess("Avatar byl změněn");
       this.character$ = this.getCharacter();
     }
   }

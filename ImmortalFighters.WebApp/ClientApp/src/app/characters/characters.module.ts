@@ -14,7 +14,7 @@ import { MatInputModule, } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { DrdCharacterDetailComponent } from './drd-character-detail/drd-character-detail.component';
-
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -34,7 +34,8 @@ import { DrdCharacterDetailComponent } from './drd-character-detail/drd-characte
     MatDialogModule,
     MatInputModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTabsModule
   ]
 })
 export class CharactersModule { }
