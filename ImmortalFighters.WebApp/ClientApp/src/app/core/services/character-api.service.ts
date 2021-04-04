@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CharacterDetailResponse, CharacterResponse, NewDrdCharacter } from '../models/character-models';
+import { DrdCharacterDetailResponse, CharacterResponse, NewDrdCharacter } from '../models/character-models';
 
 @Injectable({
     providedIn: 'root'
@@ -19,12 +19,12 @@ export class CharacterApiService {
         return this.httpClient.post<CharacterResponse>(this.baseUrl + "Character/CreateDrdCharacter", request);
     }
 
-    getDrdCharacterDetails(characterId: number): Observable<CharacterDetailResponse> {
-        return this.httpClient.get<CharacterDetailResponse>(this.baseUrl + "Character/GetDrdCharacter/" + characterId);
+    getDrdCharacterDetails(characterId: number): Observable<DrdCharacterDetailResponse> {
+        return this.httpClient.get<DrdCharacterDetailResponse>(this.baseUrl + "Character/GetDrdCharacter/" + characterId);
     }
 
-    setAvatar(value: FormData) {
-        return this.httpClient.post<{}>(this.baseUrl + "Character/UploadAvatar", value, { reportProgress: true });
+    setAvatar(value: FormData): Observable<any> {
+        return this.httpClient.post(this.baseUrl + "Character/UploadAvatar", value, { reportProgress: true });
     }
 
 

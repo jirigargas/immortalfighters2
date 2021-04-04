@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, PartialObserver } from 'rxjs';
 import { map, share, switchMap, tap } from 'rxjs/operators';
-import { CharacterDetailResponse } from '../../core/models/character-models';
+import { DrdCharacterDetailResponse } from '../../core/models/character-models';
 import { CharacterApiService } from '../../core/services/character-api.service';
+import { SnackbarService } from '../../core/services/snackbar.service';
 
 @Component({
   selector: 'app-drd-character-detail',
@@ -12,23 +12,25 @@ import { CharacterApiService } from '../../core/services/character-api.service';
   styleUrls: ['./drd-character-detail.component.scss']
 })
 export class DrdCharacterDetailComponent implements OnInit {
-  avatarForm = new FormGroup({
-    file: new FormControl('', [Validators.required]),
-  });
+  character$: Observable<DrdCharacterDetailResponse>
+  characterId: number = -1;
 
-  selectedFile: File | undefined = undefined;
-  charactedId: number = -1;
-  character$: Observable<CharacterDetailResponse>
+  characterChangedObserver: PartialObserver<void> = {
+    next: () => {
+      this.snacbarService.notifySuccess("Avatar byl změněn")
+      this.character$ = this.getCharacter();
+    }
+  }
 
-  constructor(private route: ActivatedRoute, private characterApi: CharacterApiService) {
+  constructor(private route: ActivatedRoute, private characterApi: CharacterApiService, private snacbarService: SnackbarService) {
     this.character$ = this.getCharacter();
   }
 
-  getCharacter(): Observable<CharacterDetailResponse> {
+  getCharacter(): Observable<DrdCharacterDetailResponse> {
     return this.route.paramMap
       .pipe(
         map(params => parseInt(params.get('id') ?? "")),
-        tap(x => this.charactedId = x),
+        tap(x => this.characterId = x),
         switchMap(characterId => this.characterApi.getDrdCharacterDetails(characterId)),
         share()
       );
@@ -37,20 +39,16 @@ export class DrdCharacterDetailComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onAvatarSubmit() {
-    if (this.avatarForm.valid && this.selectedFile) {
-      const formData = new FormData();
-      formData.append('CharacterId', this.charactedId.toString());
-      formData.append('file', this.selectedFile, this.selectedFile.name);
-
-      this.characterApi.setAvatar(formData).subscribe();
-    }
-  }
 
   onFileChange(event: any) {
     if (event.target.files.length > 0) {
-      this.selectedFile = <File>event.target.files[0];
+      var selectedFile = <File>event.target.files[0];
+
+      const formData = new FormData();
+      formData.append('CharacterId', this.characterId.toString());
+      formData.append('file', selectedFile, selectedFile.name);
+
+      this.characterApi.setAvatar(formData).subscribe(this.characterChangedObserver);
     }
   }
-
 }

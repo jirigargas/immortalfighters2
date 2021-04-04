@@ -5,14 +5,27 @@ export class CharacterResponse {
     avatar: string | undefined;
 }
 
-export class CharacterDetailResponse {
+export class DrdCharacterDetailResponse {
     characterId: number = -1;
+    name: string = "";
+    rasa: DrdRasa = DrdRasa.Hobit;
+    povolani: DrdPovolani = DrdPovolani.Valecnik;
+    sila: number = 0;
+    obratnost: number = 0;
+    odolnost: number = 0;
+    inteligence: number = 0;
+    charisma: number = 0;
+    zivoty: number = 0;
+    zkusenosti: number = 0;
+    uroven: number = 0;
+    presvedceni: DrdPresvedceni = DrdPresvedceni.ZakonneDobro;
+    avatar: string = "";
 }
 
 export enum Rules {
     DraciDoupe = 0,
     DraciDoupe2 = 1
-} 
+}
 
 export class NewDrdCharacter {
     name: string = "";

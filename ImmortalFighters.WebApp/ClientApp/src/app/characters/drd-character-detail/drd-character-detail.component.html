@@ -1,12 +1,26 @@
+<ng-container *ngIf="character$ | async as character">
+
+    <mat-card>
+        <mat-card-header>
+            <div mat-card-avatar class="avatar-container">
+                <img *ngIf="!character.avatar" src="assets/pictures/unknown-character.png" alt="{{character.name}}" />
+                <img *ngIf="character.avatar" src="{{character.avatar}}" alt="{{character.name}}" />
+            </div>
+            <mat-card-title>{{character.name}}</mat-card-title>
+            <mat-card-subtitle>{{character.rasa}} {{character.povolani}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+
+            <div id="avatar-div">
+                <label for="avatar">Avatar</label> 
+                <input id="avatar" name="avatar"type="file" accept="image/jpeg" (change)="onFileChange($event)" />
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-button>LIKE</button>
+            <button mat-button>SHARE</button>
+        </mat-card-actions>
+    </mat-card>
 
 
-
-<pre>{{character$ | async | json}}</pre>
-
-<form [formGroup]="avatarForm" (ngSubmit)="onAvatarSubmit()">
-    <input type="file" accept="image/jpeg" formControlName="file" (change)="onFileChange($event)" />    
-    
-    <div class="form-actions">
-        <button type="submit" [disabled]="!avatarForm.valid" mat-raised-button color="accent">Změnit avatar</button>
-    </div>
-</form>
+</ng-container>
