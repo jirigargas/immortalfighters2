@@ -14,7 +14,6 @@ namespace ImmortalFighters.WebApp.AutoMapper
                 .ForMember(x => x.Rules, opt => opt.MapFrom(o => Rules.DraciDoupe2));
 
             CreateMap<Models.DrdCharacter, DrdCharacterDetailResponse>();
-            CreateMap<Models.DrdCharacter, ICharacterDetailResponse>().As<DrdCharacterDetailResponse>();
         }
     }
 }

@@ -19,8 +19,8 @@ export class CharacterApiService {
         return this.httpClient.post<CharacterResponse>(this.baseUrl + "Character/CreateDrdCharacter", request);
     }
 
-    getDetails(characterId: number): Observable<CharacterDetailResponse> {
-        return this.httpClient.get<CharacterDetailResponse>(this.baseUrl + "Character/" + characterId);
+    getDrdCharacterDetails(characterId: number): Observable<CharacterDetailResponse> {
+        return this.httpClient.get<CharacterDetailResponse>(this.baseUrl + "Character/GetDrdCharacter/" + characterId);
     }
 
     setAvatar(value: FormData) {

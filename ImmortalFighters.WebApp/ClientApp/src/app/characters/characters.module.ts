@@ -13,7 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule, } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { CharacterDetailComponent } from './character-detail/character-detail.component';
+import { DrdCharacterDetailComponent } from './drd-character-detail/drd-character-detail.component';
 
 
 @NgModule({
@@ -21,7 +21,7 @@ import { CharacterDetailComponent } from './character-detail/character-detail.co
     CharactersComponent,
     MyCharactersComponent,
     CreateCharacterDrdComponent,
-    CharacterDetailComponent
+    DrdCharacterDetailComponent
   ],
   imports: [
     CommonModule,

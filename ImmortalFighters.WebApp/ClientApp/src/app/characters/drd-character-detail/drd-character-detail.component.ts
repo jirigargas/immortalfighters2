@@ -7,11 +7,11 @@ import { CharacterDetailResponse } from '../../core/models/character-models';
 import { CharacterApiService } from '../../core/services/character-api.service';
 
 @Component({
-  selector: 'app-character-detail',
-  templateUrl: './character-detail.component.html',
-  styleUrls: ['./character-detail.component.scss']
+  selector: 'app-drd-character-detail',
+  templateUrl: './drd-character-detail.component.html',
+  styleUrls: ['./drd-character-detail.component.scss']
 })
-export class CharacterDetailComponent implements OnInit {
+export class DrdCharacterDetailComponent implements OnInit {
   avatarForm = new FormGroup({
     file: new FormControl('', [Validators.required]),
   });
@@ -29,7 +29,7 @@ export class CharacterDetailComponent implements OnInit {
       .pipe(
         map(params => parseInt(params.get('id') ?? "")),
         tap(x => this.charactedId = x),
-        switchMap(characterId => this.characterApi.getDetails(characterId)),
+        switchMap(characterId => this.characterApi.getDrdCharacterDetails(characterId)),
         share()
       );
   }

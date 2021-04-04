@@ -1,4 +1,4 @@
-<form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+<form class="form" [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="on">
     <mat-card class="card">
         <mat-card-header>
             <mat-card-title>Immortal Fighters</mat-card-title>
@@ -22,7 +22,7 @@
             <mat-form-field class="full-width">
                 <mat-label>Heslo</mat-label>
                 <input type="password" matInput formControlName="password" [errorStateMatcher]="matcher"
-                    autocomplete="new-password">
+                    autocomplete="password">
                 <mat-error *ngIf="form.controls['password'].hasError('required')">
                     Heslo je vyžadované
                 </mat-error>

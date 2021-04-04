@@ -13,7 +13,7 @@ namespace ImmortalFighters.WebApp.Services
     {
         public IEnumerable<CharacterResponse> GetMyCharacters();
         CharacterResponse CreateDrdCharacter(CreateDrdCharacterRequest createDrdCharacterRequest);
-        ICharacterDetailResponse GetDetail(int characterId);
+        DrdCharacterDetailResponse GetDrdCharacterDetail(int characterId);
         void SetAvatar(int charactedId, string base64File);
     }
 
@@ -64,11 +64,11 @@ namespace ImmortalFighters.WebApp.Services
             return _mapper.Map<CharacterResponse>(response);
         }
 
-        public ICharacterDetailResponse GetDetail(int characterId)
+        public DrdCharacterDetailResponse GetDrdCharacterDetail(int characterId)
         {
             // TODO implement all the checks here
             var character = _characterRepository.GetById(characterId);
-            return _mapper.Map<ICharacterDetailResponse>(character);
+            return _mapper.Map<DrdCharacterDetailResponse>(character);
         }
 
         public IEnumerable<CharacterResponse> GetMyCharacters()

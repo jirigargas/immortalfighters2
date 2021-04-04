@@ -58,6 +58,7 @@ namespace ImmortalFighters.WebApp
             services.AddScoped<ICharacterService, CharacterService>();
             services.AddScoped<IDrdCharacterCreator, DrdCharacterCreator>();
             services.AddScoped<IDrdBonusOrPenaltyService, DrdBonusOrPenaltyService>();
+            services.AddScoped<IImageProcessor, ImageProcessor>();
 
             // imperative authorization
             services.AddAuthorization();

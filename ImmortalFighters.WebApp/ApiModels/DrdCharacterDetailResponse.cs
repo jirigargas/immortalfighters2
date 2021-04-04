@@ -2,13 +2,7 @@
 
 namespace ImmortalFighters.WebApp.ApiModels
 {
-    public interface ICharacterDetailResponse
-    {
-        public int CharacterId { get; set; }
-        public string Avatar { get; set; }
-    }
-
-    public class DrdCharacterDetailResponse : ICharacterDetailResponse
+    public class DrdCharacterDetailResponse
     {
         public int CharacterId { get; set; }
         public string Name { get; set; }
@@ -23,6 +17,6 @@ namespace ImmortalFighters.WebApp.ApiModels
         public int Zkusenosti { get; set; }
         public int Uroven { get; set; }
         public DrdPresvedceni Presvedceni { get; set; }
-        public string Avatar { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public string Avatar { get; set; }
     }
 }

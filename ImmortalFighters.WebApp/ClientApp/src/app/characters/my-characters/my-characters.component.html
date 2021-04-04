@@ -40,12 +40,12 @@
                 <img src="assets/pictures/unknown-character.png" alt="{{character.name}}" />
             </div>
             <div class="character-image-container" *ngIf="character.avatar">
-                <img src="data:image/jpeg;base64,{{character.avatar}}" alt="{{character.name}}" />
+                <img src="{{character.avatar}}" alt="{{character.name}}" />
             </div>
         </mat-card-content>
 
         <mat-card-actions>
-            <button mat-raised-button color="primary" [routerLink]="['../', character.characterId]">Detail</button>
+            <button mat-raised-button color="primary" [routerLink]="['../', character.rules,  character.characterId]">Detail</button>
         </mat-card-actions>
     </mat-card>
 </div>
