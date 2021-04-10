@@ -20,6 +20,7 @@ namespace ImmortalFighters.WebApp.Models.Seed
             using (var scope = serviceProvider.CreateScope())
             {
                 var context = scope.ServiceProvider.GetService<IfDbContext>();
+                var admin = context.Users.First(x => x.Username == "admin");
 
                 var generalForum = context.Forums.FirstOrDefault(x => x.Name == "Obecné forum");
                 if (generalForum == null)
@@ -38,6 +39,11 @@ namespace ImmortalFighters.WebApp.Models.Seed
                     foreach (var role in context.Roles)
                     {
                         context.AccessRights.Add(new ForumRoleAccessRight { CanRead = true, CanWrite = true, Forum = newForum, Role = role });
+                    }
+
+                    for(int i = 0; i < 1000; i++)
+                    {
+                        context.ForumEntries.Add(new ForumEntry() { Created = DateTime.UtcNow, Forum = newForum, Status = ForumEntryStatus.Active, User = admin, Text = "{\"ops\":[{\"insert\":\"ahoj\\n\"}]}" });
                     }
                 }
 

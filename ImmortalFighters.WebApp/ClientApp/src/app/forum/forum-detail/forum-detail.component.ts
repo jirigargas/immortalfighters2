@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { QuillEditorComponent } from 'ngx-quill';
@@ -25,11 +26,16 @@ export class ForumDetailComponent implements OnInit {
 
   editingEntry: ForumEntry | undefined;
 
+  // MatPaginator Inputs
+  forumTotalLength = 0;
+  pageSize = 10;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+
   @ViewChild("forumEntryEditor") forumEntryEditor!: QuillEditorComponent;
 
   crudObserver: PartialObserver<any> = {
     next: x => {
-      this.forumEntries$ = this.getForumEntries();
+      this.forumEntries$ = this.getForumEntries(0, this.pageSize);
       this.newForumEntryModel = "";
       this.editingEntry = undefined;
     },
@@ -38,15 +44,16 @@ export class ForumDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute, private forumEntryApi: ForumEntryApiService, private store: Store<AppState>) {
     this.currentUser$ = this.store.select(getUsername);
     this.forumName$ = this.route.queryParamMap.pipe(map(x => x.get('name') ?? ""));
-    this.forumEntries$ = this.getForumEntries();
+    this.forumEntries$ = this.getForumEntries(0, this.pageSize);
   }
 
-  getForumEntries(): Observable<ForumEntries> {
+  getForumEntries(page: number, pageSize: number): Observable<ForumEntries> {
     return this.route.paramMap
       .pipe(
         map(params => parseInt(params.get('id') ?? "")),
         tap(forumId => this.forumId = forumId),
-        switchMap(forumId => this.forumEntryApi.get(forumId, 0, 10)),
+        switchMap(forumId => this.forumEntryApi.get(forumId, page, pageSize)),
+        tap(x => this.forumTotalLength = x.totalCount),
         share()
       );
   }
@@ -86,6 +93,10 @@ export class ForumDetailComponent implements OnInit {
     var jsonText = JSON.parse(entry.text);
     this.forumEntryEditor.quillEditor.setContents(jsonText);
     (this.forumEntryEditor.elementRef.nativeElement as HTMLElement)?.scrollIntoView()
+  }
+
+  pageChanged(event: PageEvent) {
+    this.forumEntries$ = this.getForumEntries(event.pageIndex, event.pageSize);
   }
 
 }

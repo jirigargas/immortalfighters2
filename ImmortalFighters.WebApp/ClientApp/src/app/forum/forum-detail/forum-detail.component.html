@@ -1,4 +1,4 @@
-<p>{{forumName$ | async}}</p>
+<h1 class="mat-title">{{forumName$ | async}}</h1>
 
 <mat-card class="new-entry-card">
     <quill-editor (onContentChanged)="onContentChanged($event)" #forumEntryEditor id="newForumEntryEditor"
@@ -7,8 +7,8 @@
     <button mat-raised-button color="accent" (click)="createNewEntry()">Odeslat</button>
 </mat-card>
 
-TOTAL:{{(forumEntries$ | async)?.totalCount}}
-
+<mat-paginator #paginatorTop [length]="forumTotalLength" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+    (page)="pageChanged($event); paginatorBottom.pageIndex = $event.pageIndex; paginatorBottom.pageSize = $event.pageSize;"></mat-paginator>
 
 <ng-container *ngFor="let entry of (forumEntries$ | async)?.forumEntries">
     <mat-card class="forumEntry">
@@ -28,9 +28,13 @@ TOTAL:{{(forumEntries$ | async)?.totalCount}}
             <button mat-button (click)="deleteEntry(entry)" *ngIf="(currentUser$ | async) === entry.username">
                 Smazat
             </button>
-            <button mat-button color="accent" (click)="editEntry(entry)" *ngIf="(currentUser$ | async) === entry.username">
+            <button mat-button color="accent" (click)="editEntry(entry)"
+                *ngIf="(currentUser$ | async) === entry.username">
                 Upravit
             </button>
         </mat-card-actions>
     </mat-card>
 </ng-container>
+
+<mat-paginator #paginatorBottom [length]="forumTotalLength" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+    (page)="pageChanged($event); paginatorTop.pageIndex = $event.pageIndex; paginatorTop.pageSize = $event.pageSize;"></mat-paginator>

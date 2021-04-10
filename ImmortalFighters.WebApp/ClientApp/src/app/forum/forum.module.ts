@@ -16,6 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { QuillModule } from 'ngx-quill';
 
 
@@ -34,6 +35,7 @@ import { QuillModule } from 'ngx-quill';
     MatExpansionModule,
     MatCheckboxModule,
     MatCardModule,
+    MatPaginatorModule,
     SharedModule,
     QuillModule.forRoot({
       suppressGlobalRegisterWarning: true,
